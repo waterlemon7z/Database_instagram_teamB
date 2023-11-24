@@ -1,6 +1,6 @@
 package service;
 
-import repository.ArticleRepository;
+import repository.article.ArticleRepository;
 
 public class ArticleService
 {
