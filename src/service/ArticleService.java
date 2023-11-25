@@ -44,14 +44,16 @@ public class ArticleService
         return rst;
     }
 
-    public void createArticle(Article entity)
+    public boolean createArticle(Article entity)
     {
         try
         {
             articleRepository.insertArticle(entity);
+            return true;
         } catch (SQLException e)
         {
             System.out.println("insert 중 sql 오류 발생.");
+            return false;
         }
     }
 
