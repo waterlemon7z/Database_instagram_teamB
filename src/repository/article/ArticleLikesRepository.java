@@ -34,4 +34,48 @@ public class ArticleLikesRepository
         }
         return rst;
     }
+    public void increaseLike(Article_likes entity)
+    {
+        Connection con = ConnectionManager.getCon();
+        if(entity == null)
+            return;
+        try
+        {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("insert into article_likes value (" + entity.getArticle_id() + ", " + entity.getId() + ")");
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+    public void decreaseLike(Article_likes entity)
+    {
+        Connection con = ConnectionManager.getCon();
+        if(entity == null)
+            return;
+        try
+        {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("delete from article_likes where article_id = " + entity.getArticle_id() +" and id=" + entity.getId());
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteLikes(List<Article_likes> entity)
+    {
+        Connection con = ConnectionManager.getCon();
+        if(entity == null)  return;
+        if(entity.size() == 0)
+            return;
+        try
+        {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("delete from article_likes where article_id="+entity.get(0).getArticle_id());
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 }
