@@ -20,4 +20,13 @@ public class Article_hashtag
     {
         return hashtag;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Article_hashtag{" +
+                "article_id=" + article_id +
+                ", hashtag='" + hashtag + '\'' +
+                '}';
+    }
 }
