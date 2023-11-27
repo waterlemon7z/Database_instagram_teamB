@@ -65,6 +65,7 @@ public class FollowRepository {
     {
         Connection con = ConnectionManager.getCon();
         PreparedStatement pstmt = null;
+        if(keyMyId == keyTargetId) return;
         try{
             int followIdToInsert = keyMyId;
             int followeeIdToInsert = keyTargetId;
@@ -84,18 +85,17 @@ public class FollowRepository {
     }
 
     //팔로우 취소
-    public void cancelFollow(int keyId) throws SQLException
+    public void cancelFollow(int keyMyId, int keyTargetId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
         PreparedStatement pstmt = null;
         try{
-            int followIdToDelete = keyId;
-
-            String cancelFollow = "delete from follow where follow_id = ?";
+            String cancelFollow = "delete from follow where follow_id = ? and followee_id = ?";
             pstmt = con.prepareStatement(cancelFollow);
 
-            pstmt.setInt(1, followIdToDelete);
-            
+            pstmt.setInt(1, keyMyId);
+            pstmt.setInt(2, keyTargetId);
+
             int rowsAffected = pstmt.executeUpdate();
 
             System.out.println(rowsAffected);

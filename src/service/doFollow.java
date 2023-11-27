@@ -1,34 +1,32 @@
 package service;
 
 import jdbc.ConnectionManager;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import exception.EntityInvalidException;
 
 
-public class doFollow {
-    public static void main(String[] args) throws SQLException {
+public class doFollow
+{
+    public static void main(String[] args) throws SQLException
+    {
         // 데이터베이스 연결 정보
         /*url, user, password: 데이터베이스에 연결하기 위한 정보를 설정
         합니다. 이 정보는 각자의 데이터베이스 연결 
         정보로 수정되어야 합니다. */
-        Connection con = ConnectionManager.getCon();
-        try{
-            String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://localhost/Instagram";
-            String user = "root";
-            String password = "12345";
-            con = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-            PreparedStatement pstmt = null;
-        try{
+
+        Connection con = ConnectionManager.getConnection();
+
+        PreparedStatement pstmt = null;
+        try
+        {
             int followIdToInsert = 111;
             int followeeIdToInsert = 222;
 
-            String addFollow = "insert into follow (follow_id, followee_id) values (?, ?)";
+            String addFollow = "insert into follow values (?, ?)";
             pstmt = con.prepareStatement(addFollow);
 
             pstmt.setInt(1, followIdToInsert);
@@ -37,12 +35,13 @@ public class doFollow {
             int rowsAffected = pstmt.executeUpdate();
 
             System.out.println(rowsAffected);
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
 
         // // 데이터베이스 연결
-        
+
         // try (Connection connection = DriverManager.getConnection(url, user, password)) {
         //     System.out.println("Connected to the database.");
 
@@ -72,6 +71,6 @@ public class doFollow {
         // } catch (SQLException e) {
         //     e.printStackTrace();
         // }
-        
+
     }
 }

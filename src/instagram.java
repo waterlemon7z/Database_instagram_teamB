@@ -1,4 +1,5 @@
 import jdbc.ConnectionManager;
+import repository.follow.FollowRepository;
 import service.ArticleService;
 
 import java.sql.SQLException;
@@ -9,5 +10,9 @@ public class instagram
     public static void main(String[] args) throws SQLException
     {
         ConnectionManager.getConnection();
+        FollowRepository followRepository = new FollowRepository();
+//        followRepository.doFollow(1,2);
+//        followRepository.doFollow(1,3);
+
     }
 }

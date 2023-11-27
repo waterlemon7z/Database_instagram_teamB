@@ -16,4 +16,13 @@ public class Follow {
     {
         return followee_id;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Follow{" +
+                "follow_id=" + follow_id +
+                ", followee_id=" + followee_id +
+                '}';
+    }
 }
