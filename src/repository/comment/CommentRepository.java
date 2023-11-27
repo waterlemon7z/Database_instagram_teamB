@@ -5,6 +5,7 @@ import entity.Comment.Comment_likes;
 import entity.Comment.Comment_tags;
 import exception.EntityInvalidException;
 import jdbc.ConnectionManager;
+import repository.article_comment.article_commentRepository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class CommentRepository
     public void insertComment(Comment entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
+        article_commentRepository a_c = new article_commentRepository();
         PreparedStatement pstmt = con.prepareStatement("insert into comment value(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         pstmt.setInt(1, 0);
         pstmt.setInt(2, entity.getId());
@@ -48,6 +50,7 @@ public class CommentRepository
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         generatedKeys.next();
         commentTagsRepository.insertTag(generatedKeys.getInt(1), entity.getTags());
+        a_c.connectArticleComment(entity.getArticle_id(), entity.getComment_id());
     }
     public void deleteComment(Comment entity) throws SQLException, EntityInvalidException
     {
@@ -56,7 +59,10 @@ public class CommentRepository
         commentLikesRepository.deleteLikes(entity.getLikes());
 
         Connection con = ConnectionManager.getCon();
+        article_commentRepository a_c = new article_commentRepository();
         Statement stmt = con.createStatement();
+        a_c.disconnectArticleComment(entity.getArticle_id(), entity.getComment_id());
         stmt.executeUpdate("delete from comment where comment_id="+entity.getComment_id());
+
     }
 }
