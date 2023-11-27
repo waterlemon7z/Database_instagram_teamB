@@ -9,6 +9,7 @@ import repository.article_comment.article_commentRepository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommentRepository
@@ -34,6 +35,28 @@ public class CommentRepository
             rst = new Comment(comment_id, id, text, article_id, date, commentLikes, commentTags);
         }
         return rst;
+    }
+
+    public List<Comment> findByArticleId(int keyId) throws SQLException
+    {
+        Connection con = ConnectionManager.getCon();
+        Statement stmt = con.createStatement();
+        List<Comment> comments = new ArrayList<>();
+        try
+        {
+            String connect = "select comment_id from article_comment where article_id=";
+            ResultSet resultSet = stmt.executeQuery(connect+keyId);
+            Comment rst = null;
+            while(resultSet.next())
+            {
+                int comment_id = resultSet.getInt(1);
+                rst = findByCommentId(comment_id);
+                comments.add(rst);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
     }
 
     public void insertComment(Comment entity) throws SQLException
