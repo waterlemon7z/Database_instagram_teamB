@@ -39,9 +39,40 @@ public class ArticleService
         List<Article> rst = new ArrayList<>();
         for (Integer eachid : ids)
         {
-            rst.addAll(articleRepository.findById(eachid));
+            try
+            {
+                rst.addAll(articleRepository.findById(eachid));
+            } catch (SQLException e)
+            {
+                System.out.println("SQL 쿼리 오류 : searchByFollower");
+            }
         }
         return rst;
+    }
+
+    public List<Article> searchById(int id)
+    {
+        List<Article> rst = new ArrayList<>();
+        try
+        {
+            rst.addAll(articleRepository.findById(id));
+        } catch (SQLException e)
+        {
+            System.out.println("SQL 쿼리 오류 : searchByFollower");
+        }
+        return rst;
+    }
+
+    public Article searchByArticleId(int idx)
+    {
+        try
+        {
+            return articleRepository.findByArticleId(idx);
+        } catch (SQLException e)
+        {
+            System.out.println("SQL 쿼리 실행 오류 : searchByArticleId =>" + super.toString());
+        }
+        return null;
     }
 
     public boolean createArticle(Article entity)
@@ -70,7 +101,8 @@ public class ArticleService
             System.out.println(e.getMessage());
         }
     }
-    public void deleteArticle(Article entity)
+
+    public void removeArticle(Article entity)
     {
         try
         {

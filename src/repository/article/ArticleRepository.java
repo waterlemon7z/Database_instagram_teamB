@@ -20,31 +20,25 @@ public class ArticleRepository
     private final ArticleLikesRepository articleLikesRepository = new ArticleLikesRepository();
 
     //아이디로 게시글 찾기
-    public List<Article> findById(int keyId)
+    public List<Article> findById(int keyId) throws SQLException
     {
-        try
-        {
-            List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(keyId);
-            List<Article_image> images = articleImageRepository.findByArticleId(keyId);
+        List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(keyId);
+        List<Article_image> images = articleImageRepository.findByArticleId(keyId);
 
-            List<Article_likes> likes = articleLikesRepository.findByArticleId(keyId);
-            Connection con = ConnectionManager.getCon();
-            Statement stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from article where id = " + keyId);
-            List<Article> rst = new ArrayList<>();
-            while (resultSet.next())
-            {
-                int article_id = resultSet.getInt(1);
-                int id = resultSet.getInt(2);
-                String content = resultSet.getString(3);
-                LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
-                rst.add(new Article(article_id, id, content, date, likes, images, hashtags));
-            }
-            return rst;
-        } catch (SQLException e)
+        List<Article_likes> likes = articleLikesRepository.findByArticleId(keyId);
+        Connection con = ConnectionManager.getCon();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("select * from article where id = " + keyId);
+        List<Article> rst = new ArrayList<>();
+        while (resultSet.next())
         {
-            throw new RuntimeException(e);
+            int article_id = resultSet.getInt(1);
+            int id = resultSet.getInt(2);
+            String content = resultSet.getString(3);
+            LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
+            rst.add(new Article(article_id, id, content, date, likes, images, hashtags));
         }
+        return rst;
     }
 
     //게시글 아이디로 찾기
