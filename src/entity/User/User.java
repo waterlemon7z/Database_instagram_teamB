@@ -18,7 +18,7 @@ public class User {
     public String getUser_id() {
         return user_id;
     }
-
+// user 정보 문자열로
     public String getUserDetails() {
         return "User{" +
                 "ID=" + id +
