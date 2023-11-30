@@ -5,9 +5,11 @@ import entity.Comment.Comment_likes;
 import entity.Comment.Comment_tags;
 import exception.EntityInvalidException;
 import jdbc.ConnectionManager;
+import repository.article_comment.ArticleCommentRepository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommentRepository
@@ -35,7 +37,29 @@ public class CommentRepository
         return rst;
     }
 
-    public void insertComment(Comment entity) throws SQLException
+    public List<Comment> findByArticleId(int keyId) throws SQLException
+    {
+        Connection con = ConnectionManager.getCon();
+        Statement stmt = con.createStatement();
+        List<Comment> comments = new ArrayList<>();
+        try
+        {
+            String connect = "select comment_id from article_comment where article_id=";
+            ResultSet resultSet = stmt.executeQuery(connect+keyId);
+            Comment rst = null;
+            while(resultSet.next())
+            {
+                int comment_id = resultSet.getInt(1);
+                rst = findByCommentId(comment_id);
+                comments.add(rst);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
+    public Comment insertComment(Comment entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
         PreparedStatement pstmt = con.prepareStatement("insert into comment value(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -47,7 +71,9 @@ public class CommentRepository
         pstmt.executeUpdate();
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         generatedKeys.next();
-        commentTagsRepository.insertTag(generatedKeys.getInt(1), entity.getTags());
+        entity.setArticle_id(generatedKeys.getInt(1));
+        commentTagsRepository.insertTag(entity.getComment_id(), entity.getTags());
+        return entity;
     }
     public void deleteComment(Comment entity) throws SQLException, EntityInvalidException
     {
