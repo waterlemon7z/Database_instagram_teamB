@@ -22,11 +22,11 @@ class ArticleCommentRepositoryTest
     {
         ConnectionManager.getConnection();
         List<Comment_tags> tags = new ArrayList<>();
-        tags.add(new Comment_tags(0, "@lemon7z", 3));
-        tags.add(new Comment_tags(0, "@saewonmin", 2));
-        Comment cmt = new Comment(0, 1, "yeah you", 6, LocalDateTime.now(), null, tags);
-        commentRepository.insertComment(cmt);
-
+//        tags.add(new Comment_tags(0, "@lemon7z", 3));
+//        tags.add(new Comment_tags(0, "@saewonmin", 2));
+//        Comment cmt = new Comment(0, 1, "yeah you", 5, LocalDateTime.now(), null, tags);
+//        commentRepository.insertComment(cmt);
+//        articleCommentRepository.connectArticleComment(5,comment_id);
     }
 
     @Test

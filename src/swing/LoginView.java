@@ -1,4 +1,4 @@
-package loginTest;
+package swing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +41,7 @@ public class LoginView extends JFrame {
 
     public void placeLoginPanel(JPanel panel){
         panel.setLayout(new GridBagLayout());
+        panel.setBackground(new Color(-1));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
@@ -113,7 +114,7 @@ public class LoginView extends JFrame {
 
             // 로그인 성공이라면 매니져창 뛰우기
             if(isLogin()){
-                main.showFrameTest(); // 메인창 메소드를 이용해 창뛰우기
+                main.showFrameTest(userText.getText()); // 메인창 메소드를 이용해 창뛰우기
             }
         }else{
             JOptionPane.showMessageDialog(null, "Failed");
