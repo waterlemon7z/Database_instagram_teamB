@@ -22,7 +22,9 @@ public class User
     {
         return user_id;
     }
-        public String getPw() {
-            return pw;
+
+    public String getPw()
+    {
+        return pw;
     }
 }
