@@ -1,5 +1,4 @@
 # DataBase Team B - Instagram Project
----
 Members
 * °­¹ÎÀç
 * ¹Î¼¼¿ø
