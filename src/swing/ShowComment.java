@@ -22,6 +22,7 @@ public class ShowComment extends JFrame
     private final int article_id;
     private final int user_id;
     JEditorPane commentArea;
+
     public ShowComment(int article_id, int user_id)
     {
         this.article_id = article_id;
@@ -32,7 +33,7 @@ public class ShowComment extends JFrame
         commentFrame.setSize(400, 200);
         commentFrame.setLayout(new BorderLayout());
 
-      commentArea  = new JEditorPane();
+        commentArea = new JEditorPane();
         commentArea.setEditable(false);
         commentArea.setContentType("text/html");
         commentArea.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
@@ -51,16 +52,16 @@ public class ShowComment extends JFrame
                     {
 //                        System.out.println("OK");
                         int comment_id = Integer.parseInt(e.getDescription().substring(5));
-                        System.out.println("like : "+comment_id);
+                        System.out.println("like : " + comment_id);
                         commentService.likeSwitcher(comment_id, user_id);
                         int caretPosition = commentArea.getCaretPosition();
                         refresh();
                         commentArea.setCaretPosition(caretPosition);
                     }
-                    if(e.getDescription().contains("delete"))
+                    if (e.getDescription().contains("delete"))
                     {
                         int comment_id = Integer.parseInt(e.getDescription().substring(7));
-                        System.out.println("delete : "+comment_id);
+                        System.out.println("delete : " + comment_id);
 
                         commentService.removeComment(comment_id, user_id);
                         refresh();
@@ -79,7 +80,7 @@ public class ShowComment extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 String text = commentText.getText();
-                if(Objects.equals(text, ""))return;
+                if (Objects.equals(text, "")) return;
                 Comment comment = new Comment(0, user_id, text, article_id, LocalDateTime.now(), null, null);
                 commentService.createComment(comment);
                 refresh();
@@ -100,31 +101,38 @@ public class ShowComment extends JFrame
                 "        {\n" +
                 "            font-family: '.AppleSystemUIFont',serif !important;\n" +
                 "        }\n" +
-                "        p\n" +
-                "        {\n" +
-                "            margin-left: 10px;\n" +
-                "        }\n" +
+//                "        p\n" +
+//                "        {\n" +
+//                "            margin-left: 10px;\n" +
+//                "        }\n" +
                 "        .comment a\n" +
                 "        {\n" +
                 "            text-decoration: none;\n" +
                 "            color: black;\n" +
-                "            "+
+                "            " +
                 "        }" +
                 "        .comment\n" +
                 "        {\n" +
                 "            margin-left: 10px;\n" +
                 "            margin-bottom: 10px;\n" +
                 "        }" +
+                ".comment {\n" +
+                "            display: inline-block;\n" +
+                "        }" +
                 "    </style>\n" +
                 "</head>";
         Collections.reverse(comments);
-        for(Comment iter: comments)
+        for (Comment iter : comments)
         {
             html += "<div class=\"comment\"> " +
-                    "<span><b>" + "유저네임으로 대체필요" + iter.getId() + " </b>" + iter.getText() + "</span><br>"+
-                    "<span>"+iter.getDate()+"일     " + "<a href=\"like/"+iter.getComment_id()+"\">좋아요</a> " +iter.getLikes().size()+"개"
-                    + (iter.getId() == user_id ? "     <a href=\"delete/"+iter.getComment_id()+"\">삭제</a>" : "")+
-                    "</span>"+
+                    "<table>\n" +
+                    "    <tr>\n" +
+                    "        <td><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232\" alt=\"Your Image\" width=40></td>\n" +
+                    "        <td>"+ "<b>" + "유저네임으로 대체필요" + iter.getId() + " </b>" + iter.getText() + "<br>" +
+                    iter.getDate() + "일     " + "<a href=\"like/" + iter.getComment_id() + "\">좋아요</a> " + iter.getLikes().size() + "개"
+                    + (iter.getId() == user_id ? "     <a href=\"delete/" + iter.getComment_id() + "\">삭제</a>" : "") + "</td>\n" +
+                    "    </tr>\n" +
+                    "</table>" +
                     "</div>";
         }
         commentArea.setText(html);
