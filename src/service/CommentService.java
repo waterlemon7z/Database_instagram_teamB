@@ -25,7 +25,7 @@ public class CommentService
             articleCommentRepository.connectArticleComment(comment.getArticle_id(), comment.getComment_id());
         } catch (SQLException e)
         {
-            System.out.println("SQL ì¿¼ë¦¬ ì˜¤ë¥˜ : createComment");
+            System.out.println("SQL Äõ¸® ¿À·ù : createComment");
         }
     }
     public void removeComment(int comment_id, int id)
@@ -39,10 +39,29 @@ public class CommentService
             commentRepository.deleteComment(entity);
         } catch (SQLException e)
         {
-            System.out.println("SQL ì¿¼ë¦¬ ì˜¤ë¥˜ : removeComment");
+            System.out.println("SQL Äõ¸® ¿À·ù : removeComment");
         } catch (EntityInvalidException e)
         {
-            System.out.println("Entity ì˜¤ë¥˜ : removeComment => " + super.toString());
+            System.out.println("Entity ¿À·ù : removeComment => " + super.toString());
+        }
+    }
+
+    public void removeCommentByArticleId(int article_id)
+    {
+        try
+        {
+            List<Integer> byArticleId = articleCommentRepository.findByArticleId(article_id);
+            for (Integer  iter : byArticleId)
+            {
+                articleCommentRepository.disconnectArticleComment(article_id, iter);
+                commentRepository.deleteComment(commentRepository.findByCommentId(iter));
+            }
+        } catch (SQLException e)
+        {
+            System.out.println("SQL Äõ¸® ¿À·ù : removeComment");
+        } catch (EntityInvalidException e)
+        {
+            System.out.println("Entity ¿À·ù : removeComment => " + super.toString());
         }
     }
     public Comment searchByCommentId(int idx)
@@ -52,7 +71,7 @@ public class CommentService
             return commentRepository.findByCommentId(idx);
         } catch (SQLException e)
         {
-            System.out.println("SQL ì¿¼ë¦¬ ì˜¤ë¥˜ : searchByCommentId");
+            System.out.println("SQL Äõ¸® ¿À·ù : searchByCommentId");
         }
         return null;
     }

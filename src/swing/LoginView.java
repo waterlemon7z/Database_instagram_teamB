@@ -1,26 +1,29 @@
 package swing;
 
+import entity.User;
+import service.UserService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginView extends JFrame {
-
+public class LoginView extends JFrame
+{
+    private final UserService userService = new UserService();
     private MainLogin main;
     private MainPage mainPage;
 
-    private JButton btnLogin;
-    private JButton btnInit;
     private JPasswordField passText;
     private JTextField userText;
     private boolean bLoginCheck;
 
-    public static void main(String[] args) {
-        // new LoginView();
-    }
+//    public static void main(String[] args) {
+//        new LoginView();
+//    }
 
-    public LoginView() {
+    public LoginView()
+    {
         // setting
         setTitle("LOGIN");
         setSize(500, 700);
@@ -39,7 +42,8 @@ public class LoginView extends JFrame {
         setVisible(true);
     }
 
-    public void placeLoginPanel(JPanel panel){
+    public void placeLoginPanel(JPanel panel)
+    {
         panel.setLayout(new GridBagLayout());
         panel.setBackground(new Color(-1));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -77,56 +81,72 @@ public class LoginView extends JFrame {
         passText = new JPasswordField(20);
         gbc.gridy = 2;
         panel.add(passText, gbc);
-        passText.addActionListener(new ActionListener() {
+        passText.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 isLoginCheck();
             }
         });
 
-        btnInit = new JButton("Reset");
+        JButton btnInit = new JButton("Reset");
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(btnInit, gbc);
-        btnInit.addActionListener(new ActionListener() {
+        btnInit.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 userText.setText("");
                 passText.setText("");
             }
         });
 
-        btnLogin = new JButton("Login");
+        JButton btnLogin = new JButton("Login");
         gbc.gridx = 1;
         panel.add(btnLogin, gbc);
-        btnLogin.addActionListener(new ActionListener() {
+        btnLogin.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 isLoginCheck();
             }
         });
     }
 
-    public void isLoginCheck(){
-        if(userText.getText().equals("test") && new String(passText.getPassword()).equals("1234")){
+    public void isLoginCheck()
+    {
+        String userIdInput = userText.getText();
+        String password = new String(passText.getPassword());
+        System.out.println("password = " + password);
+        User curUser = userService.getUserByUserId(userIdInput);
+        if (curUser != null && curUser.getPw().equals(password))
+        {
             JOptionPane.showMessageDialog(null, "Success");
             bLoginCheck = true;
 
             // 로그인 성공이라면 매니져창 뛰우기
-            if(isLogin()){
-                main.showFrameTest(userText.getText()); // 메인창 메소드를 이용해 창뛰우기
+            if (isLogin())
+            {
+                main.showFrameTest(curUser.getId()); // 메인창 메소드를 이용해 창뛰우기
             }
-        }else{
+        } else
+        {
             JOptionPane.showMessageDialog(null, "Failed");
         }
     }
 
     // mainProcess와 연동
-    public void setMain(MainLogin main) {
+    public void setMain(MainLogin main)
+    {
         this.main = main;
     }
 
-    public boolean isLogin() {
+    public boolean isLogin()
+    {
         return bLoginCheck;
     }
 }

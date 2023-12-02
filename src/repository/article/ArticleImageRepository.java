@@ -39,7 +39,7 @@ public class ArticleImageRepository
         Connection con = ConnectionManager.getCon();
         if (image.size() == 0)
             return;
-        PreparedStatement preparedStatement = con.prepareStatement("insert into article_hashtag value (?, ?)");
+        PreparedStatement preparedStatement = con.prepareStatement("insert into article_image value (?, ?)");
         for (Article_image iter : image)
         {
             preparedStatement.setInt(1,article_id);

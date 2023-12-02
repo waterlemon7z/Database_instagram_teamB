@@ -2,16 +2,15 @@ package swing;
 
 import entity.Comment.Comment;
 import service.CommentService;
+import service.UserService;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +21,7 @@ public class ShowComment extends JFrame
     private final int article_id;
     private final int user_id;
     JEditorPane commentArea;
+    private final UserService userService=  new UserService();
 
     public ShowComment(int article_id, int user_id)
     {
@@ -30,7 +30,7 @@ public class ShowComment extends JFrame
         JFrame commentFrame = new JFrame("Comment : " + article_id);
         commentFrame.setResizable(false);
         commentFrame.setLocationRelativeTo(null);
-        commentFrame.setSize(400, 200);
+        commentFrame.setSize(400, 400);
         commentFrame.setLayout(new BorderLayout());
 
         commentArea = new JEditorPane();
@@ -71,7 +71,7 @@ public class ShowComment extends JFrame
         });
         JPanel addCommentP = new JPanel();
         JTextField commentText = new JTextField(20);
-        JButton submitB = new JButton("ÌôïÏù∏");
+        JButton submitB = new JButton("»Æ¿Œ");
         addCommentP.add(commentText, BorderLayout.WEST);
         addCommentP.add(submitB, BorderLayout.EAST);
         submitB.addActionListener(new ActionListener()
@@ -83,6 +83,7 @@ public class ShowComment extends JFrame
                 if (Objects.equals(text, "")) return;
                 Comment comment = new Comment(0, user_id, text, article_id, LocalDateTime.now(), null, null);
                 commentService.createComment(comment);
+                commentText.setText("");
                 refresh();
             }
         });
@@ -128,9 +129,9 @@ public class ShowComment extends JFrame
                     "<table>\n" +
                     "    <tr>\n" +
                     "        <td><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232\" alt=\"Your Image\" width=40></td>\n" +
-                    "        <td>"+ "<b>" + "Ïú†Ï†ÄÎÑ§ÏûÑÏúºÎ°ú ÎåÄÏ≤¥ÌïÑÏöî" + iter.getId() + " </b>" + iter.getText() + "<br>" +
-                    iter.getDate() + "Ïùº     " + "<a href=\"like/" + iter.getComment_id() + "\">Ï¢ãÏïÑÏöî</a> " + iter.getLikes().size() + "Í∞ú"
-                    + (iter.getId() == user_id ? "     <a href=\"delete/" + iter.getComment_id() + "\">ÏÇ≠Ï†ú</a>" : "") + "</td>\n" +
+                    "        <td>" + "<b>" + userService.getUserById(iter.getId()).getUser_id() + " </b>" + iter.getText() + "<br>" +
+                    iter.getDate() + "¿œ     " + "<a href=\"like/" + iter.getComment_id() + "\">¡¡æ∆ø‰</a> " + iter.getLikes().size() + "∞≥"
+                    + (iter.getId() == user_id ? "     <a href=\"delete/" + iter.getComment_id() + "\">ªË¡¶</a>" : "") + "</td>\n" +
                     "    </tr>\n" +
                     "</table>" +
                     "</div>";

@@ -5,46 +5,49 @@ package swing;
 //    public TestFrm(){
 //        setTitle("Test Frame");
 //        setSize(600, 400);
-//        centerFrameOnScreen(this); // ì°½ì„ í™”ë©´ ì¤‘ì•™ì— ë°°ì¹˜í•˜ëŠ” ë©”ì„œë“œ í˜¸ì¶œ
+//        centerFrameOnScreen(this); // Ã¢À» È­¸é Áß¾Ó¿¡ ¹èÄ¡ÇÏ´Â ¸Ş¼­µå È£Ãâ
 //        setVisible(true);
 //    }
 //
-//    // ì°½ì„ í™”ë©´ ì¤‘ì•™ì— ë°°ì¹˜í•˜ëŠ” ë©”ì„œë“œ
+//    // Ã¢À» È­¸é Áß¾Ó¿¡ ¹èÄ¡ÇÏ´Â ¸Ş¼­µå
 //    private void centerFrameOnScreen(JFrame frame) {
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // í™”ë©´ í¬ê¸° ê°€ì ¸ì˜¤ê¸°
-//        int centerX = (screenSize.width - frame.getWidth()) / 2; // í™”ë©´ ê°€ë¡œ ì¤‘ì•™ ìœ„ì¹˜ ê³„ì‚°
-//        int centerY = (screenSize.height - frame.getHeight()) / 2; // í™”ë©´ ì„¸ë¡œ ì¤‘ì•™ ìœ„ì¹˜ ê³„ì‚°
-//        frame.setLocation(centerX, centerY); // ì°½ì„ í™”ë©´ ì¤‘ì•™ìœ¼ë¡œ ì´ë™
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // È­¸é Å©±â °¡Á®¿À±â
+//        int centerX = (screenSize.width - frame.getWidth()) / 2; // È­¸é °¡·Î Áß¾Ó À§Ä¡ °è»ê
+//        int centerY = (screenSize.height - frame.getHeight()) / 2; // È­¸é ¼¼·Î Áß¾Ó À§Ä¡ °è»ê
+//        frame.setLocation(centerX, centerY); // Ã¢À» È­¸é Áß¾ÓÀ¸·Î ÀÌµ¿
 //    }
 //}
 
 import entity.Article.Article;
+import entity.Article.Article_hashtag;
+import entity.Follow;
 import jdbc.ConnectionManager;
 import service.ArticleService;
+import service.CommentService;
+import service.FollowService;
+import service.UserService;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.plaf.PanelUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
 
 
 public class MainPage extends JFrame
 {
-    private JButton userIdButton; // ë³€ê²½ëœ ë¶€ë¶„: JLabel ëŒ€ì‹  JButton ì‚¬ìš©
-    private JButton likeButton;
-    private JButton commentButton;
-    private String loginUser;
-    private int loginId;
-    private ArticleService articleService = new ArticleService();
+    private final int loginId;
+    private final ArticleService articleService = new ArticleService();
+    private final FollowService followService = new FollowService();
+    private final CommentService commentService = new CommentService();
+    private final UserService userService = new UserService();
+    private final JEditorPane jTextPane = new JEditorPane();
 
-    public MainPage(String userId)
+    public MainPage(int userId)
     {
-        this.loginUser = userId;
-        this.loginId = 2;
+        loginId = userId;
         setTitle("Instagram");
         setResizable(false);
         setLocationRelativeTo(null);
@@ -53,67 +56,69 @@ public class MainPage extends JFrame
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.setBackground(new Color(-1));
 
-        userIdButton = new JButton(loginUser);
-        userIdButton.setFocusPainted(false); // ë²„íŠ¼ì˜ Focus Paint ì œê±° (ìŠ¤íƒ€ì¼ë§ ëª©ì )
-        userIdButton.setBorderPainted(false); // ë²„íŠ¼ì˜ Border Paint ì œê±° (ìŠ¤íƒ€ì¼ë§ ëª©ì )
-        userIdButton.setContentAreaFilled(false); // ë²„íŠ¼ì˜ Content ì˜ì—­ ì±„ìš°ê¸° ì œê±° (ìŠ¤íƒ€ì¼ë§ ëª©ì )
-        userIdButton.setForeground(Color.BLUE); // ë²„íŠ¼ í…ìŠ¤íŠ¸ ìƒ‰ìƒ ë³€ê²½
-        userIdButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // ì»¤ì„œë¥¼ ì†ê°€ë½ í˜•íƒœë¡œ ë³€ê²½
+
+        JPanel topBtnPanel = new JPanel();
+        topBtnPanel.setLayout(new BorderLayout());
+        topBtnPanel.setBackground(new Color(-1));
+        //À¯ÀúÆäÀÌÁö ¹× ÇöÁ¦ ·Î±×ÀÎµÈ ¾ÆÀÌµğ
+        JButton userIdButton = new JButton(userService.getUserById(loginId).getUser_id());
+        userIdButton.setFocusPainted(false); // ¹öÆ°ÀÇ Focus Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        userIdButton.setBorderPainted(false); // ¹öÆ°ÀÇ Border Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        userIdButton.setContentAreaFilled(false); // ¹öÆ°ÀÇ Content ¿µ¿ª Ã¤¿ì±â Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        userIdButton.setForeground(Color.BLACK); // ¹öÆ° ÅØ½ºÆ® »ö»ó º¯°æ
+        userIdButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Ä¿¼­¸¦ ¼Õ°¡¶ô ÇüÅÂ·Î º¯°æ
         userIdButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // user id click í•˜ë©´ ì¬í˜„ ì˜¤ë¹ ê°€ ë§Œë“  ìœ ì €í˜ì´ì§€ ë©”ì¸í™”ë©´ìœ¼ë¡œ ì´ë™í•˜ëŠ”ê±°
+                // user id click ÇÏ¸é ÀçÇö ¿Àºü°¡ ¸¸µç À¯ÀúÆäÀÌÁö ¸ŞÀÎÈ­¸éÀ¸·Î ÀÌµ¿ÇÏ´Â°Å
                 JOptionPane.showMessageDialog(null, "User ID Clicked!");
             }
         });
-        panel.add(userIdButton, BorderLayout.NORTH);
+        topBtnPanel.add(userIdButton, BorderLayout.WEST);
 
-        List<Article> articles = articleService.searchById(1);
-        ScrollPane scrollPane = new ScrollPane();
+        //»õ±Û ÀÛ¼º
+        JButton newArticleBtn = new JButton("»õ±Û ÀÛ¼º");
+        newArticleBtn.setFocusPainted(false); // ¹öÆ°ÀÇ Focus Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        newArticleBtn.setBorderPainted(false); // ¹öÆ°ÀÇ Border Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        newArticleBtn.setContentAreaFilled(false); // ¹öÆ°ÀÇ Content ¿µ¿ª Ã¤¿ì±â Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        newArticleBtn.setForeground(Color.BLACK); // ¹öÆ° ÅØ½ºÆ® »ö»ó º¯°æ
+        newArticleBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Ä¿¼­¸¦ ¼Õ°¡¶ô ÇüÅÂ·Î º¯°æ
+        newArticleBtn.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                new NewArticle(loginId);
+            }
+        });
+        topBtnPanel.add(newArticleBtn, BorderLayout.EAST);
 
-        JEditorPane jTextPane = new JEditorPane();
+        JButton refreshBtn = new JButton("»õ·Î°íÄ§");
+        refreshBtn.setFocusPainted(false); // ¹öÆ°ÀÇ Focus Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        refreshBtn.setBorderPainted(false); // ¹öÆ°ÀÇ Border Paint Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        refreshBtn.setContentAreaFilled(false); // ¹öÆ°ÀÇ Content ¿µ¿ª Ã¤¿ì±â Á¦°Å (½ºÅ¸ÀÏ¸µ ¸ñÀû)
+        refreshBtn.setForeground(Color.BLACK); // ¹öÆ° ÅØ½ºÆ® »ö»ó º¯°æ
+        refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Ä¿¼­¸¦ ¼Õ°¡¶ô ÇüÅÂ·Î º¯°æ
+        refreshBtn.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                refresh();
+            }
+        });
+        topBtnPanel.add(refreshBtn, BorderLayout.CENTER);
+
+        panel.add(topBtnPanel,BorderLayout.NORTH);
+
         jTextPane.setEditable(false);
         jTextPane.setContentType("text/html");
         jTextPane.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
         jTextPane.setEnabled(true);
-        String html = "<html>\n" +
-                "<head>\n" +
-                "    <style>\n" +
-                "        body, h1, h2, h3, h4, h5, h6, p, span \n" +
-                "        {\n" +
-                "            font-family: '.AppleSystemUIFont',serif !important;\n" +
-                "        }\n" +
-                "        p\n" +
-                "        {\n" +
-                "            margin-left: 10px;\n" +
-                "        }\n" +
-                "        .comment a\n" +
-                "        {\n" +
-                "            text-decoration: none;\n" +
-                "            color: black;\n" +
-                "            "+
-                "        }" +
-                "        .comment\n" +
-                "        {\n" +
-                "            margin-left: 10px;\n" +
-                "        }" +
-                "    </style>\n" +
-                "</head>";
-        for (Article iter : articles)
-        {
-            html += "<p style=\"font-size:15px;\"><b>" + "ìœ ì €ë„¤ì„ìœ¼ë¡œ ëŒ€ì²´í•„ìš”" + iter.getId() + " </b></p>\n" +
-                    "<hr>\n" +
-                    "<img src=\"" + iter.getImage().get(0).getImage() + "\" width=\"380\">\n" +
-                    "<div class=\"comment\"> " +
-                        "<span><b>" + "ìœ ì €ë„¤ì„ìœ¼ë¡œ ëŒ€ì²´í•„ìš”" + iter.getId() + " </b>" + iter.getContent() +
-                        "<br><a href=\"comment/" + iter.getArticle_id() + "\">Show Comments..</a></span>" +
-                    "</div>";
-        }
-        jTextPane.setText(html);
-        jTextPane.setCaretPosition(0);
         jTextPane.addHyperlinkListener(new HyperlinkListener()
         {
             public void hyperlinkUpdate(HyperlinkEvent e)
@@ -126,46 +131,113 @@ public class MainPage extends JFrame
                         int article_id = Integer.parseInt(e.getDescription().substring(8));
                         System.out.println(article_id);
                         new ShowComment(article_id, loginId);
+                    }if (e.getDescription().contains("delete"))
+                    {
+//                        System.out.println("OK");
+                        int article_id = Integer.parseInt(e.getDescription().substring(7));
+                        System.out.println(article_id);
+                        commentService.removeCommentByArticleId(article_id);
+                        Article article = articleService.searchByArticleId(article_id);
+                        articleService.removeArticle(article);
+                        System.out.println("delete article : "+ article_id);
+                        refresh();
                     }
                 }
             }
         });
-
+        refresh();
         panel.add(new JScrollPane(jTextPane), BorderLayout.CENTER);
-
-//        JPanel buttonPanel = new JPanel();
-//        likeButton = new JButton("Like");
-//        commentButton = new JButton("Comment");
-//        commentButton.addActionListener(new ActionListener()
-//        {
-//            @Override
-//            public void actionPerformed(ActionEvent e)
-//            {
-//                // Handle comment button click event here
-//                JFrame commentFrame = new JFrame("Comments");
-//                commentFrame.setSize(300, 200);
-//
-//                JTextArea commentArea = new JTextArea();
-//                JScrollPane commentScrollPane = new JScrollPane(commentArea);
-//
-//                commentFrame.add(commentScrollPane);
-//                commentFrame.setVisible(true);
-//            }
-//        });
-//        buttonPanel.add(likeButton);
-//        buttonPanel.add(commentButton);
-//        panel.add(buttonPanel, BorderLayout.SOUTH);
-
         add(panel);
         setVisible(true);
     }
 
+    void refresh()
+    {
+        List<Follow> follows = followService.searchByFollow(loginId);
+        follows.add(new Follow(loginId,loginId));
+        List<Article> articles = new ArrayList<>();
+        for (Follow iter : follows)
+        {
+            articles.addAll(articleService.searchById(iter.getFollowee_id()));
+        }
+        String html = "<html>\n" +
+                "<head>\n" +
+                "    <style>\n" +
+                "        body, h1, h2, h3, h4, h5, h6, p, span \n" +
+                "        {\n" +
+                "            font-family: '.AppleSystemUIFont',serif !important;\n" +
+                "        }\n" +
+//                "        p\n" +
+//                "        {\n" +
+//                "            margin-left: 10px;\n" +
+//                "        }\n" +
+                "        .comment a\n" +
+                "        {\n" +
+                "            text-decoration: none;\n" +
+                "            margin-bottom: 10px;\n" +
+                "            color: black;\n" +
+                "            " +
+                "        }" +
+                "        a\n" +
+                "        {\n" +
+                "            text-decoration: none;\n" +
+                "            color: black;\n" +
+                "            " +
+                "        }" +
+                "        .comment\n" +
+                "        {\n" +
+                "            margin-left: 10px;\n" +
+                "        }" +
+                "    </style>\n" +
+                "</head>";
+        Collections.sort(articles,new ArticleComparator());
+
+        for (Article iter : articles)
+        {
+            List<Article_hashtag> hashtag = iter.getHashtag();
+            String hashtagString= "";
+            for(Article_hashtag hash : hashtag)
+            {
+                hashtagString+= hash.getHashtag();
+            }
+            html += "<table>\n" +
+                    "    <tr>\n" +
+                    "        <td><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232\" alt=\"Your Image\" width=40></td>\n" +
+                    "        <td><p style=\"font-size:15px;\"><b>"+userService.getUserById(iter.getId()).getUser_id() + "</b></p>\n</td>\n" +
+                    "        <td align=\"right\">"+(iter.getId() == loginId ? "     <a href=\"delete/" + iter.getArticle_id() + "\">»èÁ¦</a>" : "") + "\n</td>\n" +
+                    "    </tr>\n" +
+                    "</table>" +
+                    "<hr>\n" +
+                    "<img src=\"" + (iter.getImage().size() == 0 ? "http://www.durc.kr/img/sub/noimage.png" : iter.getImage().get(0).getImage()) + "\" width=\"380\">\n" +
+                    "<div class=\"comment\"> " +
+                    "<span><b>" + userService.getUserById(iter.getId()).getUser_id() + " </b>" + iter.getContent() +
+                    (hashtagString.equals("") ? "" : "<br>"+hashtagString)+
+                    "<br><a href=\"comment/" + iter.getArticle_id() + "\">Show "+commentService.searchByArticleId(iter.getArticle_id()).size()+" Comments..</a></span>" +
+                    "<br><font color=\"gray\">"+iter.getDate().getYear()+"."+iter.getDate().getMonthValue()+"."+iter.getDate().getDayOfMonth()+ " "+
+                    iter.getDate().getHour() +"½Ã "+ iter.getDate().getMinute()+"ºĞ</font>"+
+                    "</div>";
+        }
+        jTextPane.setText(html);
+        jTextPane.setCaretPosition(0);
+    }
+    static class ArticleComparator implements Comparator<Article>
+    {
+        @Override
+        public  int compare(Article o1, Article o2) {
+            return o2.getDate()
+                    .compareTo(o1.getDate());
+        }
+    }
     public static void main(String[] args)
     {
+        UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 12)); // ÀûÀıÇÑ ÆùÆ®·Î º¯°æ
+
+
         ConnectionManager.getConnection();
         SwingUtilities.invokeLater(() ->
         {
-            new MainPage("lemon7z_");
+            new MainPage(1);
         });
     }
 }
+

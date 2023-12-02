@@ -12,52 +12,42 @@ public class FollowRepository {
     int follow_id;
     int followee_id;
     //내가 팔로우한 사람 찾기
-    public List<Follow> findByFollow(int keyId)
+    public List<Follow> findByFollow(int keyId) throws SQLException
     {
-        try{
-            Connection con = ConnectionManager.getCon();
-            List<Follow> lst = new ArrayList<>();
-            String selectFollow = "select * from follow where follow_id = ?";
-            PreparedStatement pstmt = con.prepareStatement(selectFollow);
-            pstmt.setInt(1, keyId);
-            
-            ResultSet rs = pstmt.executeQuery();
+        Connection con = ConnectionManager.getCon();
+        List<Follow> lst = new ArrayList<>();
+        String selectFollow = "select * from follow where follow_id = ?";
+        PreparedStatement pstmt = con.prepareStatement(selectFollow);
+        pstmt.setInt(1, keyId);
 
-            while (rs.next())
-            {
-                follow_id = rs.getInt(1);
-                followee_id = rs.getInt(2);
-                lst.add(new Follow(follow_id, followee_id));
-            }
-            return lst;
-        } catch (SQLException e)
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next())
         {
-        throw new RuntimeException(e);
+            follow_id = rs.getInt(1);
+            followee_id = rs.getInt(2);
+            lst.add(new Follow(follow_id, followee_id));
         }
+        return lst;
     }
     //나를 팔로우한 사람 찾기
-    public List<Follow> findByFollowee(int keyId)
+    public List<Follow> findByFollowee(int keyId) throws SQLException
     {
-        try{
-            Connection con = ConnectionManager.getCon();
-            List<Follow> lst = new ArrayList<>();
-            String selectFollow = "select * from follow where followee_id = ?";
-            PreparedStatement pstmt = con.prepareStatement(selectFollow);
-            pstmt.setInt(1, keyId);
-            
-            ResultSet rs = pstmt.executeQuery();
+        Connection con = ConnectionManager.getCon();
+        List<Follow> lst = new ArrayList<>();
+        String selectFollow = "select * from follow where followee_id = ?";
+        PreparedStatement pstmt = con.prepareStatement(selectFollow);
+        pstmt.setInt(1, keyId);
 
-            while (rs.next())
-            {
-                follow_id = rs.getInt(1);
-                followee_id = rs.getInt(2);
-                lst.add(new Follow(follow_id, followee_id));
-            }
-            return lst;
-        } catch (SQLException e)
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next())
         {
-        throw new RuntimeException(e);
+            follow_id = rs.getInt(1);
+            followee_id = rs.getInt(2);
+            lst.add(new Follow(follow_id, followee_id));
         }
+        return lst;
     }
 
     //팔로우 하기
@@ -67,14 +57,11 @@ public class FollowRepository {
         PreparedStatement pstmt = null;
         if(keyMyId == keyTargetId) return;
         try{
-            int followIdToInsert = keyMyId;
-            int followeeIdToInsert = keyTargetId;
-
             String addFollow = "insert into follow (follow_id, followee_id) values (?, ?)";
             pstmt = con.prepareStatement(addFollow);
 
-            pstmt.setInt(1, followIdToInsert);
-            pstmt.setInt(2, followeeIdToInsert);
+            pstmt.setInt(1, keyMyId);
+            pstmt.setInt(2, keyTargetId);
 
             int rowsAffected = pstmt.executeUpdate();
 
