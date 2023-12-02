@@ -1,8 +1,8 @@
 package repository.article_comment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import jdbc.ConnectionManager;
 
@@ -28,7 +28,6 @@ public class ArticleCommentRepository
             e.printStackTrace();
         }
     }
-
     public void disconnectArticleComment(int article_id, int comment_id) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -48,5 +47,17 @@ public class ArticleCommentRepository
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public List<Integer> findByArticleId(int article_id) throws SQLException
+    {
+        List<Integer> rst = new ArrayList<>();
+        Connection con = ConnectionManager.getCon();
+        Statement stmt = con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("select * from article_comment where article_id=" + article_id);
+        while(resultSet.next())
+        {
+            rst.add(resultSet.getInt(2));
+        }
+        return rst;
     }
 }

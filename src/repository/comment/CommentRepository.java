@@ -71,8 +71,8 @@ public class CommentRepository
         pstmt.executeUpdate();
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         generatedKeys.next();
-        entity.setArticle_id(generatedKeys.getInt(1));
-        commentTagsRepository.insertTag(entity.getComment_id(), entity.getTags());
+        entity.setComment_id(generatedKeys.getInt(1));
+        commentTagsRepository.insertTag(generatedKeys.getInt(1), entity.getTags());
         return entity;
     }
     public void deleteComment(Comment entity) throws SQLException, EntityInvalidException

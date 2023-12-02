@@ -29,7 +29,7 @@ public class ArticleService
             }
         } catch (SQLException e)
         {
-            System.out.println("select ì‹¤í–‰ ì¤‘ ì˜¤ë¥˜ë°œìƒ");
+            System.out.println("select ½ÇÇà Áß ¿À·ù¹ß»ı");
         }
         return rst;
     }
@@ -44,7 +44,7 @@ public class ArticleService
                 rst.addAll(articleRepository.findById(eachid));
             } catch (SQLException e)
             {
-                System.out.println("SQL ì¿¼ë¦¬ ì˜¤ë¥˜ : searchByFollower");
+                System.out.println("SQL Äõ¸® ¿À·ù : searchByFollower");
             }
         }
         return rst;
@@ -58,7 +58,7 @@ public class ArticleService
             rst.addAll(articleRepository.findById(id));
         } catch (SQLException e)
         {
-            System.out.println("SQL ì¿¼ë¦¬ ì˜¤ë¥˜ : searchByFollower");
+            System.out.println("SQL Äõ¸® ¿À·ù : searchByFollower");
         }
         return rst;
     }
@@ -70,7 +70,7 @@ public class ArticleService
             return articleRepository.findByArticleId(idx);
         } catch (SQLException e)
         {
-            System.out.println("SQL ì¿¼ë¦¬ ì‹¤í–‰ ì˜¤ë¥˜ : searchByArticleId =>" + super.toString());
+            System.out.println("SQL Äõ¸® ½ÇÇà ¿À·ù : searchByArticleId =>" + super.toString());
         }
         return null;
     }
@@ -83,7 +83,7 @@ public class ArticleService
             return true;
         } catch (SQLException e)
         {
-            System.out.println("insert ì¤‘ sql ì˜¤ë¥˜ ë°œìƒ.");
+            System.out.println("insert Áß sql ¿À·ù ¹ß»ı.");
             return false;
         }
     }
@@ -95,7 +95,7 @@ public class ArticleService
             articleRepository.updateArticle(entity);
         } catch (SQLException e)
         {
-            System.out.println("update ì¤‘ sql ì˜¤ë¥˜ ë°œìƒ.");
+            System.out.println("update Áß sql ¿À·ù ¹ß»ı.");
         } catch (EntityInvalidException e)
         {
             System.out.println(e.getMessage());
@@ -106,10 +106,11 @@ public class ArticleService
     {
         try
         {
+
             articleRepository.deleteArticle(entity);
         } catch (SQLException e)
         {
-            System.out.println("update ì¤‘ sql ì˜¤ë¥˜ ë°œìƒ.");
+            System.out.println("delete Áß sql ¿À·ù ¹ß»ı.");
         }
     }
 }

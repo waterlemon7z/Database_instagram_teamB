@@ -30,7 +30,7 @@ public class CommentTagsRepository
     public void insertTag(int comment_id, List<Comment_tags> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
-        if (entity.size() == 0)
+        if (entity == null || entity.size() == 0)
             return;
         PreparedStatement preparedStatement = con.prepareStatement("insert into comment_tags value (?, ?, ?)");
         for (Comment_tags iter : entity)
