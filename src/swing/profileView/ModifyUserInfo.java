@@ -103,7 +103,7 @@ public class ModifyUserInfo extends JFrame
         {
             public void run()
             {
-                new exe(1);
+                new ModifyUserInfo(1);
             }
         });
     }
