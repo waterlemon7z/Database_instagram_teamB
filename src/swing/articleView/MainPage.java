@@ -1,4 +1,4 @@
-package swing;
+package swing.articleView;
 
 //public class TestFrm extends JFrame {
 //
@@ -21,18 +21,22 @@ package swing;
 import entity.Article.Article;
 import entity.Article.Article_hashtag;
 import entity.Follow;
+import entity.User;
+import entity.UserInfo;
 import jdbc.ConnectionManager;
-import service.ArticleService;
-import service.CommentService;
-import service.FollowService;
-import service.UserService;
+import service.*;
+import swing.profileView.InstagramProfileGUI;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -43,6 +47,7 @@ public class MainPage extends JFrame
     private final FollowService followService = new FollowService();
     private final CommentService commentService = new CommentService();
     private final UserService userService = new UserService();
+    private final UserInfoService userInfoService = new UserInfoService();
     private final JEditorPane jTextPane = new JEditorPane();
 
     public MainPage(int userId)
@@ -54,14 +59,44 @@ public class MainPage extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 800);
 
+        Color backgroundColor = Color.WHITE;
+        UIManager.put("Panel.background", new ColorUIResource(backgroundColor));
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(-1));
+        JPanel searchBarPanel = new JPanel();
+        JTextField searchField = new JTextField(20);
+        JButton searchButton = new JButton("Search");
 
+        searchBarPanel.add(searchField);
+        searchBarPanel.add(searchButton);
+
+        searchButton.addActionListener(e ->
+        {
+            String searchText = searchField.getText();
+            if(searchText.contains("#"))
+            {
+                List<Article> articles = articleService.searchByHashtag(searchText);
+                new ShowArticle(loginId, articles);
+            }
+            else
+            {
+                User searchUser = userService.getUserByUserId(searchText);
+                if (searchUser == null)
+                {
+                    JOptionPane.showMessageDialog(null, searchText + " : 존재하지 않는 유저");
+                } else
+                {
+                    new InstagramProfileGUI(loginId, searchUser.getId());
+                }
+            }
+
+        });
 
         JPanel topBtnPanel = new JPanel();
         topBtnPanel.setLayout(new BorderLayout());
         topBtnPanel.setBackground(new Color(-1));
+        topBtnPanel.add(searchBarPanel,BorderLayout.SOUTH);
         //유저페이지 및 현제 로그인된 아이디
         JButton userIdButton = new JButton(userService.getUserById(loginId).getUser_id());
         userIdButton.setFocusPainted(false); // 버튼의 Focus Paint 제거 (스타일링 목적)
@@ -74,8 +109,7 @@ public class MainPage extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // user id click 하면 재현 오빠가 만든 유저페이지 메인화면으로 이동하는거
-                JOptionPane.showMessageDialog(null, "User ID Clicked!");
+                new InstagramProfileGUI(loginId, loginId);
             }
         });
         topBtnPanel.add(userIdButton, BorderLayout.WEST);
@@ -113,7 +147,7 @@ public class MainPage extends JFrame
         });
         topBtnPanel.add(refreshBtn, BorderLayout.CENTER);
 
-        panel.add(topBtnPanel,BorderLayout.NORTH);
+        panel.add(topBtnPanel, BorderLayout.NORTH);
 
         jTextPane.setEditable(false);
         jTextPane.setContentType("text/html");
@@ -131,7 +165,8 @@ public class MainPage extends JFrame
                         int article_id = Integer.parseInt(e.getDescription().substring(8));
                         System.out.println(article_id);
                         new ShowComment(article_id, loginId);
-                    }if (e.getDescription().contains("delete"))
+                    }
+                    if (e.getDescription().contains("delete"))
                     {
 //                        System.out.println("OK");
                         int article_id = Integer.parseInt(e.getDescription().substring(7));
@@ -139,8 +174,24 @@ public class MainPage extends JFrame
                         commentService.removeCommentByArticleId(article_id);
                         Article article = articleService.searchByArticleId(article_id);
                         articleService.removeArticle(article);
-                        System.out.println("delete article : "+ article_id);
+                        System.out.println("delete article : " + article_id);
                         refresh();
+                    }
+                    if (e.getDescription().contains("like"))
+                    {
+//                        System.out.println("OK");
+                        int article_id = Integer.parseInt(e.getDescription().substring(5));
+                        System.out.println(article_id);
+                        articleService.likeSwitcher(article_id, loginId);
+                        System.out.println("delete article : " + article_id);
+                        refresh();
+                    }
+                    if (e.getDescription().contains("profile"))
+                    {
+//                        System.out.println("OK");
+                        int userId = Integer.parseInt(e.getDescription().substring(8));
+                        System.out.println(userId);
+                        new InstagramProfileGUI(loginId, userId);
                     }
                 }
             }
@@ -154,7 +205,7 @@ public class MainPage extends JFrame
     void refresh()
     {
         List<Follow> follows = followService.searchByFollow(loginId);
-        follows.add(new Follow(loginId,loginId));
+//        follows.add(new Follow(loginId,loginId));
         List<Article> articles = new ArrayList<>();
         for (Follow iter : follows)
         {
@@ -190,44 +241,49 @@ public class MainPage extends JFrame
                 "        }" +
                 "    </style>\n" +
                 "</head>";
-        Collections.sort(articles,new ArticleComparator());
+        Collections.sort(articles, new ArticleComparator());
 
         for (Article iter : articles)
         {
             List<Article_hashtag> hashtag = iter.getHashtag();
-            String hashtagString= "";
-            for(Article_hashtag hash : hashtag)
+            UserInfo userInfo = userInfoService.getUserInfo(iter.getId());
+            String hashtagString = "";
+            for (Article_hashtag hash : hashtag)
             {
-                hashtagString+= hash.getHashtag();
+                hashtagString += hash.getHashtag();
             }
             html += "<table>\n" +
                     "    <tr>\n" +
-                    "        <td><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232\" alt=\"Your Image\" width=40></td>\n" +
-                    "        <td><p style=\"font-size:15px;\"><b>"+userService.getUserById(iter.getId()).getUser_id() + "</b></p>\n</td>\n" +
-                    "        <td align=\"right\">"+(iter.getId() == loginId ? "     <a href=\"delete/" + iter.getArticle_id() + "\">삭제</a>" : "") + "\n</td>\n" +
+                    "        <td><img src=" + (userInfo.getProfileImage().equals("") ? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/680px-Default_pfp.svg.png?20220226140232" : userInfo.getProfileImage()) + " alt=\"Your Image\" width=40></td>\n" +
+                    "        <td><p style=\"font-size:15px;\"><b><a href=\"profile/" + iter.getId() + "\">" + userService.getUserById(iter.getId()).getUser_id() + "</a></b></p>\n</td>\n" +
+                    "        <td align=\"right\">" + (iter.getId() == loginId ? "     <a href=\"delete/" + iter.getArticle_id() + "\">삭제</a>" : "") + "\n</td>\n" +
                     "    </tr>\n" +
                     "</table>" +
                     "<hr>\n" +
                     "<img src=\"" + (iter.getImage().size() == 0 ? "http://www.durc.kr/img/sub/noimage.png" : iter.getImage().get(0).getImage()) + "\" width=\"380\">\n" +
                     "<div class=\"comment\"> " +
-                    "<span><b>" + userService.getUserById(iter.getId()).getUser_id() + " </b>" + iter.getContent() +
-                    (hashtagString.equals("") ? "" : "<br>"+hashtagString)+
-                    "<br><a href=\"comment/" + iter.getArticle_id() + "\">Show "+commentService.searchByArticleId(iter.getArticle_id()).size()+" Comments..</a></span>" +
-                    "<br><font color=\"gray\">"+iter.getDate().getYear()+"."+iter.getDate().getMonthValue()+"."+iter.getDate().getDayOfMonth()+ " "+
-                    iter.getDate().getHour() +"시 "+ iter.getDate().getMinute()+"분</font>"+
+                    "<span><b><a href=\"like/"+iter.getArticle_id()+"\">좋아요 " + iter.getLikes().size()+ "개</a></b></span>"+
+                    "<br><span><b>" + userService.getUserById(iter.getId()).getUser_id() + " </b>" + iter.getContent() +
+                    (hashtagString.equals("") ? "" : "<br>" + hashtagString) +
+                    "<br><a href=\"comment/" + iter.getArticle_id() + "\">Show " + commentService.searchByArticleId(iter.getArticle_id()).size() + " Comments..</a></span>" +
+                    "<br><font color=\"gray\">" + iter.getDate().getYear() + "." + iter.getDate().getMonthValue() + "." + iter.getDate().getDayOfMonth() + " " +
+                    iter.getDate().getHour() + "시 " + iter.getDate().getMinute() + "분</font>" +
                     "</div>";
         }
         jTextPane.setText(html);
         jTextPane.setCaretPosition(0);
     }
+
     static class ArticleComparator implements Comparator<Article>
     {
         @Override
-        public  int compare(Article o1, Article o2) {
+        public int compare(Article o1, Article o2)
+        {
             return o2.getDate()
                     .compareTo(o1.getDate());
         }
     }
+
     public static void main(String[] args)
     {
         UIManager.put("Label.font", new Font("Arial", Font.PLAIN, 12)); // 적절한 폰트로 변경

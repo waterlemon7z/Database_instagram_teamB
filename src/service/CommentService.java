@@ -1,6 +1,5 @@
 package service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import entity.Comment.Comment;
 import entity.Comment.Comment_likes;
 import exception.EntityInvalidException;

@@ -2,6 +2,7 @@ package swing;
 
 import entity.User;
 import service.UserService;
+import swing.articleView.MainPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.event.ActionListener;
 public class LoginView extends JFrame
 {
     private final UserService userService = new UserService();
-    private MainLogin main;
+    private swingmain main;
     private MainPage mainPage;
 
     private JPasswordField passText;
@@ -140,7 +141,7 @@ public class LoginView extends JFrame
     }
 
     // mainProcess와 연동
-    public void setMain(MainLogin main)
+    public void setMain(swingmain main)
     {
         this.main = main;
     }

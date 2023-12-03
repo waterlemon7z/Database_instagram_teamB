@@ -2,8 +2,11 @@ package service;
 
 import entity.Article.Article;
 import entity.Article.Article_hashtag;
+import entity.Article.Article_likes;
+import entity.Comment.Comment_likes;
 import exception.EntityInvalidException;
 import repository.article.ArticleHashtagRepository;
+import repository.article.ArticleLikesRepository;
 import repository.article.ArticleRepository;
 
 import java.sql.SQLException;
@@ -14,6 +17,7 @@ public class ArticleService
 {
     private final ArticleRepository articleRepository = new ArticleRepository();
     private final ArticleHashtagRepository articleHashtagRepository = new ArticleHashtagRepository();
+    private final ArticleLikesRepository articleLikesRepository = new ArticleLikesRepository();
 
     public List<Article> searchByHashtag(String hash)
     {
@@ -111,6 +115,30 @@ public class ArticleService
         } catch (SQLException e)
         {
             System.out.println("delete 중 sql 오류 발생.");
+        }
+    }
+
+    public void likeSwitcher(int article_id, int user_id)
+    {
+        try
+        {
+            List<Article_likes> byArticleId = articleLikesRepository.findByArticleId(article_id);
+            boolean flag = false;
+            for (Article_likes iter : byArticleId)
+            {
+                if(iter.getId() == user_id)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag)
+                articleLikesRepository.decreaseLike(new Article_likes(article_id, user_id));
+            else
+                articleLikesRepository.increaseLike(new Article_likes(article_id, user_id));
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }

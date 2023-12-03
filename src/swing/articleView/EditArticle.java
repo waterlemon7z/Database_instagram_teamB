@@ -1,4 +1,4 @@
-package swing;
+package swing.articleView;
 
 import entity.Article.Article;
 import entity.Article.Article_hashtag;
@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewArticle extends JFrame
+public class EditArticle extends JFrame
 {
     private JTextArea imageUrlField;
     private JTextArea contentField;
     private JTextField hashtagField;
     private final ArticleService articleService = new ArticleService();
 
-    public NewArticle(int loginId)
+    public EditArticle(Article editA, int loginId)
     {
         setTitle("새글 작성");
         setSize(400, 300);
@@ -35,15 +35,27 @@ public class NewArticle extends JFrame
         // 이미지 주소 입력 필드
         imageUrlField = createTextArea(); // 이미지 주소도 JTextArea로 변경
         mainPanel.add(createLabeledPanel("이미지 주소:", imageUrlField));
-
+        if(editA.getImage().size() != 0)
+        {
+            String tar = "";
+            for (Article_image iter: editA.getImage())
+                tar += iter.getImage() + ",";
+            imageUrlField.setText(tar);
+        }
         // 내용 입력 필드 (JTextArea)
         contentField = createTextArea();
         mainPanel.add(createLabeledPanel("내용:         ", contentField));
-
+        contentField.setText(editA.getContent());
         // 해시태그 입력 필드
         hashtagField = createTextField();
         mainPanel.add(createLabeledPanel("해시태그:   ", hashtagField));
-
+        if(editA.getHashtag().size() != 0)
+        {
+            String tar = "";
+            for (Article_hashtag iter: editA.getHashtag())
+                tar += iter.getHashtag() + ",";
+            hashtagField.setText(tar);
+        }
         // 여러 이미지, 여러 해시태그 입력 안내 문구 (JTextPane 사용)
         JTextPane noteTextPane = createNoteTextPane();
         mainPanel.add(noteTextPane);
@@ -88,9 +100,9 @@ public class NewArticle extends JFrame
                         hashtagList.add(new Article_hashtag(0, iter));
                     }
                 }
-                Article article = new Article(0, loginId, content, LocalDateTime.now(), null, imageList, hashtagList);
-                articleService.createArticle(article);
-                JOptionPane.showMessageDialog(NewArticle.this, "작성되었습니다.");
+                Article article = new Article(editA.getArticle_id(), loginId, content, editA.getDate(), editA.getLikes(), imageList, hashtagList);
+                articleService.updateArticle(article);
+                JOptionPane.showMessageDialog(EditArticle.this, "수정되었습니다.");
                 dispose();
             }
         });
