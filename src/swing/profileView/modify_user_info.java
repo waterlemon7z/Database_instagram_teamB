@@ -64,10 +64,10 @@ public class modify_user_info extends JFrame {
             String intro = introField.getText();
             String job = jobField.getText();
             String email = emailField.getText();
-            String phone = phoneField.getText();
+            String mobile = phoneField.getText();
 
             // 인스타그램 데이터베이스 연결 객체를 통해 정보 수정
-            String updateQuery = "UPDATE user_info SET profile_Image=?, intro=?, job=?, email=?, phone=? WHERE user_id=?";
+            String updateQuery = "UPDATE user_info SET profile_Image=?, intro=?, job=?, email=?, mobile=? WHERE id=?";
             PreparedStatement preparedStatement = instagram.prepareStatement(updateQuery);
 
             // 각각의 필드에 해당하는 값을 설정
@@ -75,7 +75,7 @@ public class modify_user_info extends JFrame {
             preparedStatement.setString(2, intro);
             preparedStatement.setString(3, job);
             preparedStatement.setString(4, email);
-            preparedStatement.setString(5, phone);
+            preparedStatement.setString(5, mobile);
             preparedStatement.setInt(6, 1); // 유저 ID를 설정
 
 
