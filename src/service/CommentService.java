@@ -1,6 +1,6 @@
 package service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import entity.Comment.Comment;
 import entity.Comment.Comment_likes;
 import exception.EntityInvalidException;
@@ -25,7 +25,7 @@ public class CommentService
             articleCommentRepository.connectArticleComment(comment.getArticle_id(), comment.getComment_id());
         } catch (SQLException e)
         {
-            System.out.println("SQL Äõ¸® ¿À·ù : createComment");
+            System.out.println("SQL ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : createComment");
         }
     }
     public void removeComment(int comment_id, int id)
@@ -39,10 +39,10 @@ public class CommentService
             commentRepository.deleteComment(entity);
         } catch (SQLException e)
         {
-            System.out.println("SQL Äõ¸® ¿À·ù : removeComment");
+            System.out.println("SQL ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : removeComment");
         } catch (EntityInvalidException e)
         {
-            System.out.println("Entity ¿À·ù : removeComment => " + super.toString());
+            System.out.println("Entity ï¿½ï¿½ï¿½ï¿½ : removeComment => " + super.toString());
         }
     }
 
@@ -58,10 +58,10 @@ public class CommentService
             }
         } catch (SQLException e)
         {
-            System.out.println("SQL Äõ¸® ¿À·ù : removeComment");
+            System.out.println("SQL ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : removeComment");
         } catch (EntityInvalidException e)
         {
-            System.out.println("Entity ¿À·ù : removeComment => " + super.toString());
+            System.out.println("Entity ï¿½ï¿½ï¿½ï¿½ : removeComment => " + super.toString());
         }
     }
     public Comment searchByCommentId(int idx)
@@ -71,7 +71,7 @@ public class CommentService
             return commentRepository.findByCommentId(idx);
         } catch (SQLException e)
         {
-            System.out.println("SQL Äõ¸® ¿À·ù : searchByCommentId");
+            System.out.println("SQL ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : searchByCommentId");
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package swing.profileView;
 
+import entity.UserInfo;
 import jdbc.ConnectionManager;
 import service.UserInfoService;
 
@@ -10,10 +11,9 @@ import java.sql.*;
 
 public class modify_user_info extends JFrame {
     private final UserInfoService userinfoservice = new UserInfoService();
-    private JTextField profileImageField, bioField, occupationField, emailField, phoneField;
+    private JTextField profileImageField, introField, jobField, emailField, phoneField;
     private JButton updateButton;
     private Connection instagram; // 인스타그램 데이터베이스 연결 객체
-
     public modify_user_info(Connection conn) {
         this.instagram = conn; // 인스타그램 데이터베이스 연결 객체 받아오기
 
@@ -26,15 +26,15 @@ public class modify_user_info extends JFrame {
         add(profileImageLabel);
         add(profileImageField);
 
-        JLabel bioLabel = new JLabel("Bio:");
-        bioField = new JTextField();
-        add(bioLabel);
-        add(bioField);
+        JLabel introLabel = new JLabel("Intro:");
+        introField = new JTextField();
+        add(introLabel);
+        add(introField);
 
-        JLabel occupationLabel = new JLabel("Occupation:");
-        occupationField = new JTextField();
-        add(occupationLabel);
-        add(occupationField);
+        JLabel jobLabel = new JLabel("Job:");
+        jobField = new JTextField();
+        add(jobLabel);
+        add(jobField);
 
         JLabel emailLabel = new JLabel("Email:");
         emailField = new JTextField();
@@ -61,8 +61,8 @@ public class modify_user_info extends JFrame {
     private void updateUserInfo() {
         try {
             String profileImage = profileImageField.getText();
-            String bio = bioField.getText();
-            String occupation = occupationField.getText();
+            String bio = introField.getText();
+            String occupation = jobField.getText();
             String email = emailField.getText();
             String phone = phoneField.getText();
 
@@ -77,6 +77,7 @@ public class modify_user_info extends JFrame {
             preparedStatement.setString(4, email);
             preparedStatement.setString(5, phone);
             preparedStatement.setInt(6, 1); // 유저 ID를 설정
+
 
             // 쿼리 실행
             int rowsUpdated = preparedStatement.executeUpdate();
