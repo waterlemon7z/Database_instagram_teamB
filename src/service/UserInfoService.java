@@ -8,7 +8,6 @@ import java.sql.SQLException;
 public class UserInfoService {
 
     private final UserInfoRepository userInfoRepository = new UserInfoRepository();
-
     public UserInfo createUserInfo(UserInfo user_info) {
         try
         {
