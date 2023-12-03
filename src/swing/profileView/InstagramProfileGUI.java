@@ -65,12 +65,14 @@ public class InstagramProfileGUI extends JFrame
         setSize(400, 700);
 
         JPanel searchBarPanel = new JPanel();
-        JTextField searchField = new JTextField(20);
+        searchBarPanel.setLayout(new FlowLayout());
+        JTextField searchField = new JTextField(14);
         JButton searchButton = new JButton("Search");
 
         searchBarPanel.add(searchField);
         searchBarPanel.add(searchButton);
-
+        JButton profileModify = new JButton("프로필 수정");
+        searchBarPanel.add(profileModify);
         searchButton.addActionListener(e ->
         {
             String searchText = searchField.getText();
@@ -83,7 +85,10 @@ public class InstagramProfileGUI extends JFrame
                 new InstagramProfileGUI(loginId, searchUser.getId());
             }
         });
-
+        profileModify.addActionListener(e->
+        {
+            new ModifyUserInfo(loginId);
+        });
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(searchBarPanel, BorderLayout.NORTH);
@@ -152,7 +157,7 @@ public class InstagramProfileGUI extends JFrame
         ConnectionManager.getConnection();
         SwingUtilities.invokeLater(() ->
         {
-            new InstagramProfileGUI(2,1);
+            new InstagramProfileGUI(1,1);
         });
     }
 
