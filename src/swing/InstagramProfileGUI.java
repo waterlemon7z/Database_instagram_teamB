@@ -1,6 +1,7 @@
 package swing;
 
 import entity.Article.Article;
+import service.ArticleService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +38,7 @@ public class InstagramProfileGUI extends JFrame {
                 if (profile1.getIndex() == searchIndex) {
                     JOptionPane.showMessageDialog(null, "프로필 찾음!\n사용자 이름: " + profile.getUsername() + "\n바이오: " + profile.getBioLabel());
                     profileFound = true;
+                    new InstagramProfileGUI(profile);
                     break;
                 }
             }
@@ -117,8 +119,8 @@ public class InstagramProfileGUI extends JFrame {
         Article[] articles = new Article[post_idx]; // Modify the size according to your requirement
 
 // Initialize posts with sample data for demonstration
-        articles[0] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
-        articles[1] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
+        //articles[0] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
+        //articles[1] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
 
 
         // Inside the loop where you create grid cells
@@ -132,15 +134,16 @@ public class InstagramProfileGUI extends JFrame {
             cellLabel1.setHorizontalAlignment(SwingConstants.CENTER); // 이미지를 가운데 정렬
 
             JLabel cellLabel2 = new JLabel();
-
+            ArticleService as = new ArticleService();
+            List<Article> articles1 = as.searchById(2);
             if (i < articles.length) {
-                ImageIcon imageIcon1 = new ImageIcon(articles[i].getImagePath());
+                ImageIcon imageIcon1 = new ImageIcon(articles1.get(i).getImage().get(0).getImage());
                 Image image1 = imageIcon.getImage();
                 Image newImage1 = image.getScaledInstance(180, 100, Image.SCALE_SMOOTH); // 이미지 크기 조절
                 ImageIcon scaledImageIcon1 = new ImageIcon(newImage);
 
                 cellLabel1.setIcon(scaledImageIcon);
-                cellLabel2.setText(articles[i].getText());
+                cellLabel2.setText(articles[i].getContent());
             }
 
             gridCell.add(cellLabel1);
