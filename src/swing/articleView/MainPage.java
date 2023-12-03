@@ -1,4 +1,4 @@
-package swing;
+package swing.articleView;
 
 //public class TestFrm extends JFrame {
 //

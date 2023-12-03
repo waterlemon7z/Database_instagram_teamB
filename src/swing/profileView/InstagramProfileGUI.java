@@ -1,7 +1,8 @@
-package swing;
+package swing.profileView;
 
 import entity.Article.Article;
 import service.ArticleService;
+import swing.profileView.InstagramProfile;
 
 import javax.swing.*;
 import java.awt.*;

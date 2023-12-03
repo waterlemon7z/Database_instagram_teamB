@@ -1,8 +1,9 @@
 package swing;
 
 import jdbc.ConnectionManager;
+import swing.articleView.MainPage;
 
-public class MainLogin
+public class swingmain
 {
     private LoginView loginView;
     private MainPage mainPage;
@@ -11,7 +12,7 @@ public class MainLogin
     {
         // 메인 클래스 실행
         ConnectionManager.getConnection();
-        MainLogin main = new MainLogin();
+        swingmain main = new swingmain();
         main.initializeLoginView(); // 로그인창 초기화 및 보이기
     }
 

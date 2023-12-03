@@ -1,4 +1,4 @@
-package swing;
+package swing.articleView;
 
 import entity.Article.Article;
 import entity.Article.Article_hashtag;

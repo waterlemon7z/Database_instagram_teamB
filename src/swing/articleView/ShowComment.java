@@ -1,4 +1,4 @@
-package swing;
+package swing.articleView;
 
 import entity.Comment.Comment;
 import service.CommentService;

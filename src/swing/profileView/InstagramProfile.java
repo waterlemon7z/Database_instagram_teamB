@@ -1,4 +1,4 @@
-package swing;
+package swing.profileView;
 
 public class InstagramProfile {
     private int index; // Add this field
