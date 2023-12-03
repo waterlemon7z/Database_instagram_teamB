@@ -5,6 +5,7 @@ import jdbc.ConnectionManager;
 import service.UserInfoService;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +30,8 @@ public class ModifyUserInfo extends JFrame
         // 각 필드의 배경색을 흰색으로 설정
         Color whiteColor = new Color(255, 255, 255);
 
+//        Color backgroundColor = Color.WHITE;
+//        UIManager.put("Panel.background", new ColorUIResource(backgroundColor));
         profileImageField = createTextArea(curUserInfo.getProfileImage());
         mainPanel.add(createLabeledPanel("Profile Image URL: ", profileImageField));
         introField = createTextArea(curUserInfo.getIntro());
