@@ -16,7 +16,7 @@ public class ConnectionManager {
         String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://localhost/Instagram";
         String id = "root";
-        String pwd = "0000";
+        String pwd = "whwogus4568";
         try {
             Class.forName(driver);
             try {
