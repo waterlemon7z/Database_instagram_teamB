@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 public class LoginView extends JFrame
 {
     private final UserService userService = new UserService();
-    private swingmain main;
+    private SwingLauncher main;
     private MainPage mainPage;
 
     private JPasswordField passText;
@@ -141,7 +141,7 @@ public class LoginView extends JFrame
     }
 
     // mainProcess와 연동
-    public void setMain(swingmain main)
+    public void setMain(SwingLauncher main)
     {
         this.main = main;
     }
