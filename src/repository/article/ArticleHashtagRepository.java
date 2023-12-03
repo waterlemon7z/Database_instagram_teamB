@@ -44,7 +44,7 @@ public class ArticleHashtagRepository
     public void insertHashtag(int article_id, List<Article_hashtag> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
-        if (entity.size() == 0)
+        if (entity == null || entity.size() == 0)
             return;
         PreparedStatement preparedStatement = con.prepareStatement("insert into article_hashtag value (?, ?)");
         for (Article_hashtag iter : entity)

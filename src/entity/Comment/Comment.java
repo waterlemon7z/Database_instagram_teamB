@@ -5,17 +5,18 @@ import java.util.List;
 
 public class Comment
 {
-    private final int comment_id;
+    private  int comment_id;
     private final int id;
     private final String text;
-    private int article_id;
+    private final int article_id;
     private final LocalDateTime date;
     private final List<Comment_likes> likes;
     private final List<Comment_tags> tags;
 
-    public void setArticle_id(int article_id)
+
+    public void setComment_id(int comment_id)
     {
-        this.article_id = article_id;
+        this.comment_id = comment_id;
     }
 
     public Comment(int comment_id, int id, String text, int article_id, LocalDateTime date, List<Comment_likes> likes, List<Comment_tags> tags)

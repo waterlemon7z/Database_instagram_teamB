@@ -10,9 +10,24 @@ public class Article
     private final int id;
     private final String content;
     private final LocalDateTime date;
-    private final List<Article_likes> likes;
-    private final List<Article_image> image;
-    private final List<Article_hashtag> hashtag;
+    private  List<Article_likes> likes;
+    private  List<Article_image> image;
+    private  List<Article_hashtag> hashtag;
+
+    public void setLikes(List<Article_likes> likes)
+    {
+        this.likes = likes;
+    }
+
+    public void setImage(List<Article_image> image)
+    {
+        this.image = image;
+    }
+
+    public void setHashtag(List<Article_hashtag> hashtag)
+    {
+        this.hashtag = hashtag;
+    }
 
     public Article(int article_id, int id, String content, LocalDateTime date, List<Article_likes> likes, List<Article_image> image, List<Article_hashtag> hashtag)
     {

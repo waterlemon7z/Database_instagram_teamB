@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArticleRepository
 {
@@ -22,10 +23,6 @@ public class ArticleRepository
     //아이디로 게시글 찾기
     public List<Article> findById(int keyId) throws SQLException
     {
-        List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(keyId);
-        List<Article_image> images = articleImageRepository.findByArticleId(keyId);
-
-        List<Article_likes> likes = articleLikesRepository.findByArticleId(keyId);
         Connection con = ConnectionManager.getCon();
         Statement stmt = con.createStatement();
         ResultSet resultSet = stmt.executeQuery("select * from article where id = " + keyId);
@@ -36,7 +33,17 @@ public class ArticleRepository
             int id = resultSet.getInt(2);
             String content = resultSet.getString(3);
             LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
-            rst.add(new Article(article_id, id, content, date, likes, images, hashtags));
+            rst.add(new Article(article_id, id, content, date,null,null,null));
+        }
+        for (Article iter : rst)
+        {
+            int articleId = iter.getArticle_id();
+            List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(articleId);
+            List<Article_image> images = articleImageRepository.findByArticleId(articleId);
+            List<Article_likes> likes = articleLikesRepository.findByArticleId(articleId);
+             iter.setImage(images);
+             iter.setHashtag(hashtags);
+             iter.setLikes(likes);
         }
         return rst;
     }

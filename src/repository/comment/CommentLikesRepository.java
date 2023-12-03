@@ -25,13 +25,19 @@ public class CommentLikesRepository
         return rst;
     }
 
-    public void increaseLike(int comment_id, Comment_likes entity) throws SQLException
+    public void increaseLike(Comment_likes entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
         PreparedStatement pstmt = con.prepareStatement("insert into comment_likes value (?,?)");
-        pstmt.setInt(1, comment_id);
+        pstmt.setInt(1, entity.getComment_id());
         pstmt.setInt(2, entity.getId());
         pstmt.executeUpdate();
+    }
+    public void decreaseLike(Comment_likes entity) throws SQLException
+    {
+        Connection con = ConnectionManager.getCon();
+        Statement stmt = con.createStatement();
+        stmt.executeUpdate("delete from comment_likes where comment_id="+ entity.getComment_id()+" and id="+entity.getId());
     }
 
 
