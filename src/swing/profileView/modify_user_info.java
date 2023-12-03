@@ -16,7 +16,7 @@ public class modify_user_info extends JFrame {
     private Connection instagram; // 인스타그램 데이터베이스 연결 객체
     public modify_user_info(Connection conn) {
         this.instagram = conn; // 인스타그램 데이터베이스 연결 객체 받아오기
-
+        UserInfo users = new UserInfo(1,"images/instagram.png", "awf", "afewa", "awfd","afwaf");
         setTitle("Instagram User Info Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(6, 2));
@@ -60,20 +60,20 @@ public class modify_user_info extends JFrame {
 
     private void updateUserInfo() {
         try {
-            String profileImage = profileImageField.getText();
-            String bio = introField.getText();
-            String occupation = jobField.getText();
+            String profile_Image = profileImageField.getText();
+            String intro = introField.getText();
+            String job = jobField.getText();
             String email = emailField.getText();
             String phone = phoneField.getText();
 
             // 인스타그램 데이터베이스 연결 객체를 통해 정보 수정
-            String updateQuery = "UPDATE users SET profile_image=?, bio=?, occupation=?, email=?, phone=? WHERE user_id=?";
+            String updateQuery = "UPDATE user_info SET profile_Image=?, intro=?, job=?, email=?, phone=? WHERE user_id=?";
             PreparedStatement preparedStatement = instagram.prepareStatement(updateQuery);
 
             // 각각의 필드에 해당하는 값을 설정
-            preparedStatement.setString(1, profileImage);
-            preparedStatement.setString(2, bio);
-            preparedStatement.setString(3, occupation);
+            preparedStatement.setString(1, profile_Image);
+            preparedStatement.setString(2, intro);
+            preparedStatement.setString(3, job);
             preparedStatement.setString(4, email);
             preparedStatement.setString(5, phone);
             preparedStatement.setInt(6, 1); // 유저 ID를 설정
