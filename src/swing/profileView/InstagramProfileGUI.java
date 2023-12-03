@@ -19,7 +19,6 @@ public class InstagramProfileGUI extends JFrame {
         this.instagramProfiles.add(profile);
 
         setTitle("Instagram Profile");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
 
         JPanel searchBarPanel = new JPanel();
@@ -119,13 +118,6 @@ public class InstagramProfileGUI extends JFrame {
         int post_idx = 2;
         Article[] articles = new Article[post_idx]; // Modify the size according to your requirement
 
-// Initialize posts with sample data for demonstration
-        //articles[0] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
-        //articles[1] = new Article("/Users/jaehyeoncho/IdeaProjects/user_page/out/production/user_page/ikon.jpg", "Sample Text");
-
-
-        // Inside the loop where you create grid cells
-        // Inside the loop where you create grid cells
         for (int i = 0; i < 9; i++) {
             JPanel gridCell = new JPanel(new GridLayout(1, 2));
             gridCell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
