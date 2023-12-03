@@ -1,12 +1,10 @@
 package swing.profileView;
 
 public class InstagramProfile {
-    private int index; // Add this field
-
-    // Your existing fields...
+    private final int id;
+    private final String username;
     private String imgPath;
-    private String username;
-    private String bioLabel;
+    private String intro;
     private int postsCount;
     private int followersCount;
     private int followingCount;
@@ -14,18 +12,18 @@ public class InstagramProfile {
     // Constructor including the index parameter
     public InstagramProfile(int index, String imgPath, String username, String bioLabel,
                             int postsCount, int followersCount, int followingCount) {
-        this.index = index;
+        this.id = index;
         this.imgPath = imgPath;
         this.username = username;
-        this.bioLabel = bioLabel;
+        this.intro = bioLabel;
         this.postsCount = postsCount;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
     }
 
     // Getter for index
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
     // Your existing getters...
@@ -37,8 +35,8 @@ public class InstagramProfile {
         return username;
     }
 
-    public String getBioLabel() {
-        return bioLabel;
+    public String getIntro() {
+        return intro;
     }
 
     public int getPostsCount() {

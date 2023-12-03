@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ArticleLikesRepository
 {
-    List<Article_likes> findByArticleId(int keyId) throws SQLException
+   public List<Article_likes> findByArticleId(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
         Statement stmt;
