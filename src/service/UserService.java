@@ -1,3 +1,13 @@
+/*
+ * Name        : UserService
+ * Author      : [kang min jae]
+ * Date        : 2023-12-05
+ * Arguments   : User object or user ID
+ * Return      : User object (for createUser, updateUser, getUserById), void (for deleteUser)
+ * Description : This class provides services related to user management. It includes methods for creating, deleting,
+ *               updating, and retrieving user information. It interacts with the UserRepository to perform these operations,
+ *               thereby abstracting the database operation details from the client.
+ */
 package service;
 
 import entity.User;

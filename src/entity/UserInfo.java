@@ -1,3 +1,13 @@
+/*
+ * Name        : User_info
+ * Author      : [kang min jae]
+ * Date        : 2023-12-05
+ * Arguments   : int id (user's ID from User class), String profileImage, String intro, String job, String email, String mobile
+ * Return      : User_info object
+ * Description : This class represents additional information for a user. It stores details like profile image, introduction, job, email, and mobile number.
+ *               It includes getters and setters for these properties. This class enhances the User entity by providing more personal and contact information.
+ */
+
 package entity;
 
 
