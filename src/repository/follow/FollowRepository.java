@@ -11,7 +11,14 @@ import java.util.List;
 public class FollowRepository {
     int follow_id;
     int followee_id;
-    //내가 팔로우한 사람 찾기
+     /*
+     * Name        : findByFollow
+     * Author      : 이정대
+     * Date        : 23/12/05
+     * argument    : my id
+     * return      : 내 id와 내가 팔로우한 사람의 id를 한 쌍으로 묶어서 만든 List를 반환합니다
+     * description : 내가 팔로우한 사람을 데이터베이스의 follow 테이블에서 내 id를 통해 검색합니다
+     */
     public List<Follow> findByFollow(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -30,7 +37,14 @@ public class FollowRepository {
         }
         return lst;
     }
-    //나를 팔로우한 사람 찾기
+     /*
+     * Name        : findByFollowee
+     * Author      : 이정대
+     * Date        : 23/12/05
+     * argument    : my id
+     * return      : 나를 팔로우한 사람의 id와 내 id를 한 쌍으로 묶어서 만든 List를 반환합니다
+     * description : 나를 팔로우한 사람을 데이터베이스의 follow 테이블에서 내 id를 통해 검색합니다
+     */
     public List<Follow> findByFollowee(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -49,8 +63,14 @@ public class FollowRepository {
         }
         return lst;
     }
-
-    //팔로우 하기
+     /*
+     * Name        : doFollow
+     * Author      : 이정대
+     * Date        : 23/12/05
+     * argument    : my id, the other person's id
+     * return      : 없습니다
+     * description : 내 id와 상대방의 id를 데이터베이스의 follow 테이블에 추가함으로서 팔로우합니다
+     */
     public void doFollow(int keyMyId, int keyTargetId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -70,8 +90,14 @@ public class FollowRepository {
             e.printStackTrace();
         }
     }
-
-    //팔로우 취소
+     /*
+     * Name        : cancelFollow
+     * Author      : 이정대
+     * Date        : 23/12/05
+     * argument    : my id, the other person's id
+     * return      : 없습니다
+     * description : 내 id와 상대방의 id를 데이터베이스의 follow 테이블에서 제거함으로서 팔로우를 취소합니다
+     */
     public void cancelFollow(int keyMyId, int keyTargetId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
