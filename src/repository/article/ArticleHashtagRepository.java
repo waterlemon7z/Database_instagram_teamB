@@ -9,6 +9,14 @@ import java.util.List;
 
 public class ArticleHashtagRepository
 {
+    /*
+     * Name        : findByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Article_hashtag>
+     * description : Find article hashtag in article_hashtag table by Article id
+     */
     public List<Article_hashtag> findByArticleId(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -24,7 +32,14 @@ public class ArticleHashtagRepository
         }
         return rst;
     }
-
+    /*
+     * Name        : findByHashTag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : String
+     * return      : List<Article_hashtag>
+     * description : Find article hashtag in article_hashtag table by hashtag
+     */
     public List<Article_hashtag> findByHashTag(String keyHash) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -40,7 +55,14 @@ public class ArticleHashtagRepository
 
         return rst;
     }
-
+    /*
+     * Name        : insertHashtag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, List<Article_hashtag>
+     * return      : void
+     * description : Insert hashtag into database table
+     */
     public void insertHashtag(int article_id, List<Article_hashtag> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -54,7 +76,14 @@ public class ArticleHashtagRepository
             preparedStatement.executeUpdate();
         }
     }
-
+    /*
+     * Name        : deleteHashtag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : List<Article_hashtag>
+     * return      : void
+     * description : delete hashtag from database table
+     */
     public void deleteHashtag(List<Article_hashtag> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -63,5 +92,4 @@ public class ArticleHashtagRepository
         Statement stmt = con.createStatement();
         stmt.executeUpdate("delete from article_hashtag where article_id=" + entity.get(0).getArticle_id());
     }
-
 }

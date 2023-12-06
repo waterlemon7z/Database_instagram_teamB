@@ -16,7 +16,15 @@ public class CommentService
     private final CommentRepository commentRepository = new CommentRepository();
     private final ArticleCommentRepository articleCommentRepository = new ArticleCommentRepository();
     private final CommentLikesRepository commentLikesRepository = new CommentLikesRepository();
-   public void createComment(Comment entity)
+    /*
+     * Name        : createComment
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Comment
+     * return      : void
+     * description : create comment
+     */
+    public void createComment(Comment entity)
     {
         try
         {
@@ -27,12 +35,20 @@ public class CommentService
             System.out.println("SQL 쿼리 오류 : createComment");
         }
     }
+    /*
+     * Name        : removeComment
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, int
+     * return      : void
+     * description : remove comment
+     */
     public void removeComment(int comment_id, int id)
     {
         try
         {
             Comment entity = commentRepository.findByCommentId(comment_id);
-            if(entity.getId() != id)
+            if (entity.getId() != id)
                 return;
             articleCommentRepository.disconnectArticleComment(entity.getArticle_id(), entity.getComment_id());
             commentRepository.deleteComment(entity);
@@ -44,13 +60,20 @@ public class CommentService
             System.out.println("Entity 오류 : removeComment => " + super.toString());
         }
     }
-
+    /*
+     * Name        : removeCommentByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : void
+     * description : remove comment by articleID
+     */
     public void removeCommentByArticleId(int article_id)
     {
         try
         {
             List<Integer> byArticleId = articleCommentRepository.findByArticleId(article_id);
-            for (Integer  iter : byArticleId)
+            for (Integer iter : byArticleId)
             {
                 articleCommentRepository.disconnectArticleComment(article_id, iter);
                 commentRepository.deleteComment(commentRepository.findByCommentId(iter));
@@ -63,6 +86,14 @@ public class CommentService
             System.out.println("Entity 오류 : removeComment => " + super.toString());
         }
     }
+    /*
+     * Name        : searchByCommentId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : Comment
+     * description : search comment by comment id
+     */
     public Comment searchByCommentId(int idx)
     {
         try
@@ -74,6 +105,14 @@ public class CommentService
         }
         return null;
     }
+    /*
+     * Name        : searchByCommentId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Comment>
+     * description : search comment by article id
+     */
     public List<Comment> searchByArticleId(int article_id)
     {
         List<Comment> rst = new ArrayList<>();
@@ -91,6 +130,14 @@ public class CommentService
         }
         return rst;
     }
+    /*
+     * Name        : likeSwitcher
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, int
+     * return      : void
+     * description : on/off likes
+     */
     public void likeSwitcher(int comment_id, int user_id)
     {
         try
@@ -99,13 +146,13 @@ public class CommentService
             boolean flag = false;
             for (Comment_likes iter : byCommentId)
             {
-                if(iter.getId() == user_id)
+                if (iter.getId() == user_id)
                 {
                     flag = true;
                     break;
                 }
             }
-            if(flag)
+            if (flag)
                 commentLikesRepository.decreaseLike(new Comment_likes(comment_id, user_id));
             else
                 commentLikesRepository.increaseLike(new Comment_likes(comment_id, user_id));

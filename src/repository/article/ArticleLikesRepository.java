@@ -13,6 +13,14 @@ import java.util.List;
 
 public class ArticleLikesRepository
 {
+    /*
+     * Name        : findByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, List<Article_image>
+     * return      : void
+     * description : find article likes by article id
+     */
    public List<Article_likes> findByArticleId(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -28,6 +36,14 @@ public class ArticleLikesRepository
         }
         return rst;
     }
+    /*
+     * Name        : increaseLike
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article_likes
+     * return      : void
+     * description : increase likes
+     */
     public void increaseLike(Article_likes entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -36,6 +52,14 @@ public class ArticleLikesRepository
         Statement stmt = con.createStatement();
         stmt.executeUpdate("insert into article_likes value (" + entity.getArticle_id() + ", " + entity.getId() + ")");
     }
+    /*
+     * Name        : decreaseLike
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article_likes
+     * return      : void
+     * description : decrease likes
+     */
     public void decreaseLike(Article_likes entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -44,7 +68,14 @@ public class ArticleLikesRepository
         Statement stmt = con.createStatement();
         stmt.executeUpdate("delete from article_likes where article_id = " + entity.getArticle_id() +" and id=" + entity.getId());
     }
-
+    /*
+     * Name        : deleteLikes
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : List<Article_likes>
+     * return      : void
+     * description : delete all likes
+     */
     public void deleteLikes(List<Article_likes> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();

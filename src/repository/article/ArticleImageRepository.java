@@ -10,6 +10,14 @@ import java.util.List;
 
 public class ArticleImageRepository
 {
+    /*
+     * Name        : findByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : void
+     * description : find image from database table
+     */
     List<Article_image> findByArticleId(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -25,6 +33,14 @@ public class ArticleImageRepository
         }
         return rst;
     }
+    /*
+     * Name        : findByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : List<Article_image>
+     * return      : void
+     * description : delete image from database table
+     */
     public void deleteImage(List<Article_image> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -33,7 +49,14 @@ public class ArticleImageRepository
         Statement stmt = con.createStatement();
         stmt.executeUpdate("delete from article_image where article_id="+entity.get(0).getArticle_id());
     }
-
+    /*
+     * Name        : insertImage
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, List<Article_image>
+     * return      : void
+     * description : insert image into database table
+     */
     public void insertImage(int article_id, List<Article_image> image) throws SQLException
     {
         Connection con = ConnectionManager.getCon();

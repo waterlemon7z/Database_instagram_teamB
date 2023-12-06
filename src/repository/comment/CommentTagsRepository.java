@@ -11,6 +11,14 @@ import java.util.List;
 
 public class CommentTagsRepository
 {
+    /*
+     * Name        : findByCommentId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Comment_tags>
+     * description : find comment tag by comment id
+     */
     public List<Comment_tags> findByCommentId(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -26,7 +34,14 @@ public class CommentTagsRepository
         }
         return rst;
     }
-
+    /*
+     * Name        : insertTag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, List<Comment_tags>
+     * return      : void
+     * description : insert comment tag
+     */
     public void insertTag(int comment_id, List<Comment_tags> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -41,6 +56,14 @@ public class CommentTagsRepository
             preparedStatement.executeUpdate();
         }
     }
+    /*
+     * Name        : deleteTag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : List<Comment_tags>
+     * return      : void
+     * description : delete comment tag
+     */
     public void deleteTag( List<Comment_tags> entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
