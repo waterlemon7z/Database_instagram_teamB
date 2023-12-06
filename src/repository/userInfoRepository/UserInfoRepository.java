@@ -1,3 +1,9 @@
+package repository.userInfoRepository;
+
+import entity.UserInfo;
+import jdbc.ConnectionManager;
+
+import java.sql.*;
 /*
  * Name        : User_inforepository
  * Author      : [kang min jae]
@@ -7,14 +13,6 @@
  * Description : This class is responsible for direct database operations related to additional user information. It handles inserting, updating, finding, and deleting user information in the database.
  *               It uses SQL queries for database interaction and manages the database connection. This class plays a critical role in data persistence for user information.
  */
-
-package repository.userInfoRepository;
-
-import entity.UserInfo;
-import jdbc.ConnectionManager;
-
-import java.sql.*;
-
 public class UserInfoRepository
 {
 

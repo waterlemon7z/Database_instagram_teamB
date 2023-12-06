@@ -1,3 +1,9 @@
+package service;
+
+import entity.User;
+import repository.userRepository.UserRepository;
+import java.sql.SQLException;
+import java.util.List;
 /*
  * Name        : UserService
  * Author      : [kang min jae]
@@ -8,13 +14,6 @@
  *               updating, and retrieving user information. It interacts with the UserRepository to perform these operations,
  *               thereby abstracting the database operation details from the client.
  */
-package service;
-
-import entity.User;
-import repository.userRepository.UserRepository;
-import java.sql.SQLException;
-import java.util.List;
-
 public class UserService {
 
     private final UserRepository userRepository = new UserRepository();

@@ -1,3 +1,9 @@
+package service;
+
+import entity.UserInfo;
+import repository.userInfoRepository.UserInfoRepository;
+
+import java.sql.SQLException;
 /*
  * Name        : UserInfoService
  * Author      : [kang min jae]
@@ -7,14 +13,6 @@
  * Description : This class provides services for managing additional user information. It includes methods for creating, updating, retrieving, and deleting user information.
  *               It interacts with User_inforepository to perform database operations, abstracting the complexity of direct database interactions from the client.
  */
-
-package service;
-
-import entity.UserInfo;
-import repository.userInfoRepository.UserInfoRepository;
-
-import java.sql.SQLException;
-
 public class UserInfoService {
 
     private final UserInfoRepository userInfoRepository = new UserInfoRepository();
