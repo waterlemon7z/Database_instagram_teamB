@@ -16,6 +16,14 @@ public class CommentRepository
 {
     private final CommentLikesRepository commentLikesRepository = new CommentLikesRepository();
     private final CommentTagsRepository commentTagsRepository = new CommentTagsRepository();
+    /*
+     * Name        : findByCommentId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : Comment
+     * description : find comment by commentId
+     */
     public Comment findByCommentId(int keyId) throws SQLException
     {
         List<Comment_likes> commentLikes = commentLikesRepository.findByCommentId(keyId);
@@ -36,29 +44,14 @@ public class CommentRepository
         }
         return rst;
     }
-
-    public List<Comment> findByArticleId(int keyId) throws SQLException
-    {
-        Connection con = ConnectionManager.getCon();
-        Statement stmt = con.createStatement();
-        List<Comment> comments = new ArrayList<>();
-        try
-        {
-            String connect = "select comment_id from article_comment where article_id=";
-            ResultSet resultSet = stmt.executeQuery(connect+keyId);
-            Comment rst = null;
-            while(resultSet.next())
-            {
-                int comment_id = resultSet.getInt(1);
-                rst = findByCommentId(comment_id);
-                comments.add(rst);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return comments;
-    }
-
+    /*
+     * Name        : insertComment
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Comment
+     * return      : Comment
+     * description : insert comment by commentId
+     */
     public Comment insertComment(Comment entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -75,6 +68,14 @@ public class CommentRepository
         commentTagsRepository.insertTag(generatedKeys.getInt(1), entity.getTags());
         return entity;
     }
+    /*
+     * Name        : deleteComment
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Comment
+     * return      : void
+     * description : delete comment by commentId
+     */
     public void deleteComment(Comment entity) throws SQLException, EntityInvalidException
     {
         if (entity == null) throw new EntityInvalidException();

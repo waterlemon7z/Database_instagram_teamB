@@ -18,7 +18,14 @@ public class ArticleService
     private final ArticleRepository articleRepository = new ArticleRepository();
     private final ArticleHashtagRepository articleHashtagRepository = new ArticleHashtagRepository();
     private final ArticleLikesRepository articleLikesRepository = new ArticleLikesRepository();
-
+    /*
+     * Name        : searchByHashtag
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : String
+     * return      : List<Article>
+     * description : search article by hashtag
+     */
     public List<Article> searchByHashtag(String hash)
     {
         List<Article> rst = new ArrayList<>();
@@ -37,7 +44,14 @@ public class ArticleService
         }
         return rst;
     }
-
+    /* Deprecated
+     * Name        : searchByFollower
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : List<Integer>
+     * return      : List<Article>
+     * description : search article by follower
+     */
     public List<Article> searchByFollower(List<Integer> ids)
     {
         List<Article> rst = new ArrayList<>();
@@ -53,7 +67,14 @@ public class ArticleService
         }
         return rst;
     }
-
+    /*
+     * Name        : searchById
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Article>
+     * description : search article by user id
+     */
     public List<Article> searchById(int id)
     {
         List<Article> rst = new ArrayList<>();
@@ -66,7 +87,14 @@ public class ArticleService
         }
         return rst;
     }
-
+    /*
+     * Name        : searchByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : Article
+     * description : search article by article id
+     */
     public Article searchByArticleId(int idx)
     {
         try
@@ -78,7 +106,14 @@ public class ArticleService
         }
         return null;
     }
-
+    /*
+     * Name        : createArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : boolean
+     * return      : Article
+     * description : make new article
+     */
     public boolean createArticle(Article entity)
     {
         try
@@ -91,7 +126,14 @@ public class ArticleService
             return false;
         }
     }
-
+    /*
+     * Name        : updateArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article
+     * return      : void
+     * description : update article
+     */
     public void updateArticle(Article entity)
     {
         try
@@ -105,7 +147,14 @@ public class ArticleService
             System.out.println(e.getMessage());
         }
     }
-
+    /*
+     * Name        : removeArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article
+     * return      : void
+     * description : remove article
+     */
     public void removeArticle(Article entity)
     {
         try
@@ -117,7 +166,14 @@ public class ArticleService
             System.out.println("delete 중 sql 오류 발생.");
         }
     }
-
+    /*
+     * Name        : likeSwitcher
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int, int
+     * return      : void
+     * description : on/off likes
+     */
     public void likeSwitcher(int article_id, int user_id)
     {
         try

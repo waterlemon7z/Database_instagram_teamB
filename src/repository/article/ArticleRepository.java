@@ -10,9 +10,7 @@ import jdbc.ConnectionManager;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ArticleRepository
 {
@@ -20,7 +18,14 @@ public class ArticleRepository
     private final ArticleImageRepository articleImageRepository = new ArticleImageRepository();
     private final ArticleLikesRepository articleLikesRepository = new ArticleLikesRepository();
 
-    //아이디로 게시글 찾기
+    /*
+     * Name        : findById
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Article>
+     * description : find article by Id
+     */
     public List<Article> findById(int keyId) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -33,7 +38,7 @@ public class ArticleRepository
             int id = resultSet.getInt(2);
             String content = resultSet.getString(3);
             LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
-            rst.add(new Article(article_id, id, content, date,null,null,null));
+            rst.add(new Article(article_id, id, content, date, null, null, null));
         }
         for (Article iter : rst)
         {
@@ -41,14 +46,21 @@ public class ArticleRepository
             List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(articleId);
             List<Article_image> images = articleImageRepository.findByArticleId(articleId);
             List<Article_likes> likes = articleLikesRepository.findByArticleId(articleId);
-             iter.setImage(images);
-             iter.setHashtag(hashtags);
-             iter.setLikes(likes);
+            iter.setImage(images);
+            iter.setHashtag(hashtags);
+            iter.setLikes(likes);
         }
         return rst;
     }
 
-    //게시글 아이디로 찾기
+    /*
+     * Name        : findByArticleId
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : Article
+     * description : find article by article id
+     */
     public Article findByArticleId(int keyId) throws SQLException
     {
         List<Article_hashtag> hashtags = articleHashtagRepository.findByArticleId(keyId);
@@ -68,6 +80,14 @@ public class ArticleRepository
         return rst;
     }
 
+    /*
+     * Name        : insertArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article
+     * return      : void
+     * description : insert article
+     */
     public void insertArticle(Article entity) throws SQLException
     {
         Connection con = ConnectionManager.getCon();
@@ -85,6 +105,14 @@ public class ArticleRepository
         articleImageRepository.insertImage(generatedKeys.getInt(1), entity.getImage());
     }
 
+    /*
+     * Name        : deleteArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article
+     * return      : void
+     * description : delete article from article table
+     */
     public void deleteArticle(Article entity) throws SQLException
     {
         if (entity == null) return;
@@ -97,6 +125,14 @@ public class ArticleRepository
         stmt.executeUpdate("delete from article where article_id=" + entity.getArticle_id());
     }
 
+    /*
+     * Name        : updateArticle
+     * Author      : MinSeok Choi
+     * Date        : 2023-11-25
+     * argument    : Article
+     * return      : void
+     * description : update article from article table
+     */
     public void updateArticle(Article entity) throws EntityInvalidException, SQLException //글 변경 및, 해시태그 변경. 좋아요는 부동
     {
         if (findByArticleId(entity.getArticle_id()).getId() != entity.getId())
@@ -111,7 +147,6 @@ public class ArticleRepository
 
         Statement stmt = con.createStatement();
         stmt.executeUpdate("update article set content='" + entity.getContent() + "' where article_id =" + entity.getArticle_id());
-
     }
 }
 
