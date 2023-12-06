@@ -10,6 +10,14 @@ import java.util.List;
 public class FollowService
 {
     private final FollowRepository followRepository = new FollowRepository();
+    /*
+     * Name        : searchByFollow
+     * Author      : 이정대
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Follow>
+     * description : search follower by id
+     */
     public List<Follow> searchByFollow(int key)
     {
         List<Follow> rst= new ArrayList<>();
@@ -22,6 +30,14 @@ public class FollowService
         }
         return rst;
     }
+    /*
+     * Name        : searchByFollowee
+     * Author      : 이정대
+     * Date        : 2023-11-25
+     * argument    : int
+     * return      : List<Follow>
+     * description : search followee by id
+     */
     public List<Follow> searchByFollowee(int key)
     {
         List<Follow> rst= new ArrayList<>();
