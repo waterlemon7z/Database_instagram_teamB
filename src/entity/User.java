@@ -1,3 +1,13 @@
+/*
+ * Name        : User
+ * Author      : [kang min jae]
+ * Date        : 2023-12-05
+ * Arguments   : int id (user's unique identifier), String user_id (user's username), String pw (user's password)
+ * Return      : User object
+ * Description : This class represents a user entity in the system. It encapsulates the user's ID, username, and password.
+ *               Provides methods to access these properties. This class is fundamental in representing users within the application.
+ */
+
 package entity;
 
 public class User

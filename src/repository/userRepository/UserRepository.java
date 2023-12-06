@@ -1,3 +1,13 @@
+/*
+ * Name        : UserRepository
+ * Author      : [kang min jae]
+ * Date        : 2023-12-05
+ * Arguments   : User object or user ID
+ * Return      : User object (for insertUser, updateUser, findUserById), void (for deleteUser)
+ * Description : This class is responsible for direct database operations related to users. It handles inserting, deleting,
+ *               updating, and finding users in the database. The class uses SQL queries to interact with the database,
+ *               and it manages database connections and resource clean-up.
+ */
 package repository.userRepository;
 
 import entity.User;
